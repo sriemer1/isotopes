@@ -70,7 +70,7 @@ os.chdir(owd) #back to original working directory (wherever allmol file is)
 possible_mols = [] #list to store possible molecules
 for i in mass_old1:
     for j in range(365): #365 is used because that is how many masses between 1 and 100 in allmol file
-        if float(i)<=float(masses[j])+1 and float(i)>=float(masses[j])-1:
+        if float(i)<=float(masses[j])+.5 and float(i)>=float(masses[j])-.5:
             possible_mols.append(i+ '     '+ masses[j]+'     C'+numC[j]+'N'+numN[j]+'O'+numO[j]+'H'+numH[j]) 
 
 #creates new file with possible molecular weights and formulas for given RGA mass
