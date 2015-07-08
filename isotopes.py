@@ -103,6 +103,34 @@ for i in possible_mols:
 w.close()  
 
  ### ISOTOPES ###
-  
-        
+abundances = [.999885, .000115, .9893, .0107, .99636, .00364, .99757, .00038, .00205]
+isotopes =   ['H', 'Deuterium', 'C-12', 'C-13', 'N-14', 'N-15', 'O-16', 'O-17', 'O-18']
+
+def isAround(intensity1, intensity2, abundance):
+    if float(intensity1)*abundance == float(intensity2)+.5 or float(intensity2)-.5:
+        return True
+    else:
+        return False
+
+"""given_masses1 = raw_input("Enter the masses you would like isotopes for, separated by commas: ")
+new_gm= " ".join(given_masses1)  
+given_masses = new_gm.split(",")"""
+
+for i in range(len(intensities)-2):
+    for mass in mass_old1:
+        for isotope in isotopes:
+            if float(mass)%12==0:
+                multiplyBy = int(float(mass)/12)
+                if isAround(intensities[i], intensities[i+1], abundances[i]*multiplyBy):
+                    print ("\nIsotope is: " + isotope)
+            elif float(mass)%14==0:
+                multiplyBy = int(float(mass)/14)
+                if isAround(intensities[i], intensities[i+1], abundances[i]*multiplyBy):
+                    print ("\nIsotope is: " + isotope)
+            elif float(mass)%16==0:
+                multiplyBy = int(float(mass)/16)
+                if isAround(intensities[i], intensities[i+1], abundances[i]*multiplyBy):
+                    print ("\nIsotope is: " + isotope)
+                       
 print "\nProgram ended"
+os.chdir(owd)
