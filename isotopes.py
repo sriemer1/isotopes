@@ -116,21 +116,28 @@ def isAround(intensity1, intensity2, abundance):
 new_gm= " ".join(given_masses1)  
 given_masses = new_gm.split(",")"""
 
-for i in range(len(intensities)-2):
+for i in range(len(intensities)-1):
     for mass in mass_old1:
-        for isotope in isotopes:
-            if float(mass)%12==0:
-                multiplyBy = int(float(mass)/12)
-                if isAround(intensities[i], intensities[i+1], abundances[i]*multiplyBy):
-                    print ("\nIsotope is: " + isotope)
-            elif float(mass)%14==0:
-                multiplyBy = int(float(mass)/14)
-                if isAround(intensities[i], intensities[i+1], abundances[i]*multiplyBy):
-                    print ("\nIsotope is: " + isotope)
-            elif float(mass)%16==0:
-                multiplyBy = int(float(mass)/16)
-                if isAround(intensities[i], intensities[i+1], abundances[i]*multiplyBy):
-                    print ("\nIsotope is: " + isotope)
+        if float(mass)%12==0:
+            multiplyBy = int(float(mass)/12)
+            if isAround(intensities[i], intensities[i+1], abundances[3]*multiplyBy):
+                print ("\n" + mass + " Isotope is: " + isotopes[3])
+            else:
+                print ("\n" + mass + " Isotope is: " + isotopes[2])
+        elif float(mass)%14==0:
+            multiplyBy = int(float(mass)/14)
+            if isAround(intensities[i], intensities[i+1], abundances[5]*multiplyBy):
+                print ("\n" + mass+ " Isotope is: " + isotopes[5])
+            else:
+                print ("\n" + mass+ " Isotope is: " + isotopes[4])
+        elif float(mass)%16==0:
+            multiplyBy = int(float(mass)/16)
+            if isAround(intensities[i], intensities[i+1], abundances[8]*multiplyBy):
+                print ("\n" + mass+ " Isotope is: " + isotopes[8])
+            elif isAround(intensities[i], intensities[i+1], abundances[7]*multiplyBy):
+                print ("\n" + mass + " Isotope is: " + isotopes[7])
+            else:
+                print ("\n" + mass+ " Isotope is: " + isotopes[6])    
                        
 print "\nProgram ended"
 os.chdir(owd)
