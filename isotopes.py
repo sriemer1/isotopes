@@ -78,6 +78,53 @@ with open(filename2) as f2: #opens RGA data file
         
 os.chdir(owd) #back to original working directory (wherever allmol file is)
 
+ ### ISOTOPES ###
+abundances = [.999885, .000115, .9893, .0107, .99636, .00364, .99757, .00038, .00205]
+isotopes =   ['H', 'Deuterium', 'C-12', 'C-13', 'N-14', 'N-15', 'O-16', 'O-17', 'O-18']
+file_isotopes = []
+
+def isAround(intensity1, intensity2, abundance):
+    if float(intensity1)*abundance == float(intensity2)+.2 or float(intensity2)-.2:
+        return True
+    else:
+        return False
+
+for mass in mass_old1:
+    if float(mass)%12==0 or (float(mass)+.1)%12==0 or (float(mass)-.1)%12==0 or (float(mass)-.2)%12==0:
+        multiplyBy = int(float(mass)/12)
+        print multiplyBy
+        if (12*multiplyBy)+1 or (12*multiplyBy)+1.1 or (12*multiplyBy)+1.2 or (12*multiplyBy)+.9 in mass_old1:
+            if isAround(intensities[mass_old1.index(mass)], intensities[(mass_old1.index(mass))+1], abundances[3]*multiplyBy):
+                file_isotopes.append("\n" + mass + " Isotope is: " + isotopes[3])
+            else:
+                file_isotopes.append("\n" + mass + " Isotope is: " + isotopes[2])  
+        else:
+            file_isotopes.append("\n" + mass + " Isotope is: " + isotopes[2])
+    elif float(mass)%14==0 or (float(mass)+.1)%14==0 or (float(mass)-.1)%14==0 or (float(mass)-.2)%14==0:
+        multiplyBy = int(float(mass)/14)
+        print multiplyBy
+        if (14*multiplyBy)+1 or (14*multiplyBy)+1.1 or (14*multiplyBy)+1.2 or (14*multiplyBy)+.9 in mass_old1:
+            if isAround(intensities[mass_old1.index(mass)], intensities[(mass_old1.index(mass))+1], abundances[5]*multiplyBy):
+                file_isotopes.append("\n" + mass+ " Isotope is: " + isotopes[5])
+            else:
+                file_isotopes.append("\n" + mass+ " Isotope is: " + isotopes[4])
+        else:
+            file_isotopes.append("\n" + mass+ " Isotope is: " + isotopes[4])
+    elif float(mass)%16==0 or (float(mass)+.1)%16==0 or (float(mass)-.1)%16==0 or (float(mass)-.2)%16==0:
+        multiplyBy = int(float(mass)/16)
+        print multiplyBy
+        if (16*multiplyBy)+1 or (16*multiplyBy)+1.1 or (16*multiplyBy)+1.2 or (16*multiplyBy)+.9 in mass_old1:
+            if isAround(intensities[mass_old1.index(mass)], intensities[(mass_old1.index(mass))+1], abundances[8]*multiplyBy):
+                file_isotopes.append("\n" + mass+ " Isotope is: " + isotopes[8])
+            elif isAround(intensities[mass_old1.index(mass)], intensities[(mass_old1.index(mass))+1], abundances[7]*multiplyBy):
+                file_isotopes.append("\n" + mass + " Isotope is: " + isotopes[7])
+            else:
+                file_isotopes.append("\n" + mass+ " Isotope is: " + isotopes[6])
+        else:
+            file_isotopes.append("\n" + mass+ " Isotope is: " + isotopes[6])   
+                       
+
+
 possible_mols = [] #list to store possible molecules
 for i in mass_old1:
     for j in range(365): #365 is used because that is how many masses between 1 and 100 in allmol file
@@ -102,42 +149,12 @@ for i in possible_mols:
     w.writelines("%s\n" % i)
 w.close()  
 
- ### ISOTOPES ###
-abundances = [.999885, .000115, .9893, .0107, .99636, .00364, .99757, .00038, .00205]
-isotopes =   ['H', 'Deuterium', 'C-12', 'C-13', 'N-14', 'N-15', 'O-16', 'O-17', 'O-18']
-
-def isAround(intensity1, intensity2, abundance):
-    if float(intensity1)*abundance == float(intensity2)+.5 or float(intensity2)-.5:
-        return True
-    else:
-        return False
-
-"""given_masses1 = raw_input("Enter the masses you would like isotopes for, separated by commas: ")
-new_gm= " ".join(given_masses1)  
-given_masses = new_gm.split(",")"""
-
-for i in range(len(intensities)-1):
-    for mass in mass_old1:
-        if float(mass)%12==0 or (float(mass)+.1)%12==0 or (float(mass)-.1)%12==0 or (float(mass)-.2)%12==0:
-            multiplyBy = int(float(mass)/12)
-            if isAround(intensities[i], intensities[i+1], abundances[3]*multiplyBy):
-                print ("\n" + mass + " Isotope is: " + isotopes[3])
-            else:
-                print ("\n" + mass + " Isotope is: " + isotopes[2])
-        elif float(mass)%14==0 or (float(mass)+.1)%14==0 or (float(mass)-.1)%14==0 or (float(mass)-.2)%14==0:
-            multiplyBy = int(float(mass)/14)
-            if isAround(intensities[i], intensities[i+1], abundances[5]*multiplyBy):
-                print ("\n" + mass+ " Isotope is: " + isotopes[5])
-            else:
-                print ("\n" + mass+ " Isotope is: " + isotopes[4])
-        elif float(mass)%16==0 or (float(mass)+.1)%16==0 or (float(mass)-.1)%16==0 or (float(mass)-.2)%16==0:
-            multiplyBy = int(float(mass)/16)
-            if isAround(intensities[i], intensities[i+1], abundances[8]*multiplyBy):
-                print ("\n" + mass+ " Isotope is: " + isotopes[8])
-            elif isAround(intensities[i], intensities[i+1], abundances[7]*multiplyBy):
-                print ("\n" + mass + " Isotope is: " + isotopes[7])
-            else:
-                print ("\n" + mass+ " Isotope is: " + isotopes[6])    
+#### GRAPH #####                       
+given_masses1 = raw_input("Enter the masses you would like isotopes for, separated by commas: ")
+new_gm= "".join(given_masses1)  
+given_masses = new_gm.split(",")
+print given_masses
+                       
                        
 print "\nProgram ended"
 os.chdir(owd)
