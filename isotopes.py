@@ -118,19 +118,19 @@ given_masses = new_gm.split(",")"""
 
 for i in range(len(intensities)-1):
     for mass in mass_old1:
-        if float(mass)%12==0:
+        if float(mass)%12==0 or (float(mass)+.1)%12==0 or (float(mass)-.1)%12==0 or (float(mass)-.2)%12==0:
             multiplyBy = int(float(mass)/12)
             if isAround(intensities[i], intensities[i+1], abundances[3]*multiplyBy):
                 print ("\n" + mass + " Isotope is: " + isotopes[3])
             else:
                 print ("\n" + mass + " Isotope is: " + isotopes[2])
-        elif float(mass)%14==0:
+        elif float(mass)%14==0 or (float(mass)+.1)%14==0 or (float(mass)-.1)%14==0 or (float(mass)-.2)%14==0:
             multiplyBy = int(float(mass)/14)
             if isAround(intensities[i], intensities[i+1], abundances[5]*multiplyBy):
                 print ("\n" + mass+ " Isotope is: " + isotopes[5])
             else:
                 print ("\n" + mass+ " Isotope is: " + isotopes[4])
-        elif float(mass)%16==0:
+        elif float(mass)%16==0 or (float(mass)+.1)%16==0 or (float(mass)-.1)%16==0 or (float(mass)-.2)%16==0:
             multiplyBy = int(float(mass)/16)
             if isAround(intensities[i], intensities[i+1], abundances[8]*multiplyBy):
                 print ("\n" + mass+ " Isotope is: " + isotopes[8])
