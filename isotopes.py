@@ -116,14 +116,12 @@ def isAround(intensity1, intensity2, abundance):
     else:
         return False
 
-for mass in mass_old1:
+for mass in mass_old1[:-1]:
     if not noCarbon():
         multiplyBy = int(float(mass)/12)
         print multiplyBy
         if (12*multiplyBy)+1 or (12*multiplyBy)+1.1 or (12*multiplyBy)+1.2 or (12*multiplyBy)+.9 in mass_old1:
-            if (mass_old1.index(mass)) == len(mass_old1):
-                pass
-            elif isAround(intensities[mass_old1.index(mass)], intensities[(mass_old1.index(mass))+1], abundances[3]*multiplyBy):
+            if isAround(intensities[mass_old1.index(mass)], intensities[(mass_old1.index(mass))+1], abundances[3]*multiplyBy):
                 file_isotopes.append("\n" + mass + " Isotope is: " + isotopes[3])
             elif abs(intensities[(mass_old1.index(mass))+1]/intensities[mass_old1.index(mass)]) <=abundances[3]*multiplyBy and abs(intensities[(mass_old1.index(mass))+1]/intensities[mass_old1.index(mass)]) >= abundances[3]:
                 file_isotopes.append("\n" + mass +" "+ isotopes[3] + " and another molecule (see possible molecules)")
