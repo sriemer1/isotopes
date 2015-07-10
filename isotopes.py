@@ -89,38 +89,45 @@ for i in mass_old1:
  ### ISOTOPES ###
 abundances = [.999885, .000115, .9893, .0107, .99636, .00364, .99757, .00038, .00205]
 isotopes =   ['H', 'Deuterium', 'C-12', 'C-13', 'N-14', 'N-15', 'O-16', 'O-17', 'O-18']
-file_isotopes = []
+file_isotopes = []  #to store the isotopes to put into the file
 
-def noCarbon():
-    for i in possible_mols:
-        if "C0" in i:
+isotope_masses=[]
+for element in possible_mols:
+  isotope_masses.append(element[0:5]) 
+
+molecules = []
+for element in possible_mols:
+    molecules.append(element[24:])
+    
+def noCarbon(molecule):
+    for molecule in molecules:
+        if "C0" in molecule:
             return False
         else:
             return True
-def noNitrogen():
-    for i in possible_mols:
-        if "N0" in i:
+def noNitrogen(molecule):
+    for molecule in molecules:
+        if "N0" in molecule:
             return False
         else:
             return True
-def noOxygen():
-    for i in possible_mols:
+def noOxygen(molecule):
+    for molecule in molecules:
         if "O0" in i:
             return False
         else:
             return True
 
 def isAround(intensity1, intensity2, abundance):
-    if abs(float(intensity1)*abundance) == abs(float(intensity2))+.2 or abs(float(intensity2))-.2:
+    if abs(float(intensity1)*abundance) == abs(float(intensity2))+.000000005 or abs(float(intensity2))-.000000005:
         return True
     else:
         return False
 
-for mass in mass_old1[:-1]:
-    if not noCarbon():
-        multiplyBy = int(float(mass)/12)
-        print multiplyBy
-        if (12*multiplyBy)+1 or (12*multiplyBy)+1.1 or (12*multiplyBy)+1.2 or (12*multiplyBy)+.9 in mass_old1:
+for i in range(len(isotope_masses)):
+    if not noCarbon(isotope_masses[i]):
+        multiplyByC = int(molecules[i[0:2]])
+        if (12*multiplyBy)+1 or (12*multiplyBy)+1.1 or (12*multiplyBy)+1.2 or (12*multiplyBy)+.9 in isotope_masses:
             if isAround(intensities[mass_old1.index(mass)], intensities[(mass_old1.index(mass))+1], abundances[3]*multiplyBy):
                 file_isotopes.append("\n" + mass + " Isotope is: " + isotopes[3])
             elif abs(intensities[(mass_old1.index(mass))+1]/intensities[mass_old1.index(mass)]) <=abundances[3]*multiplyBy and abs(intensities[(mass_old1.index(mass))+1]/intensities[mass_old1.index(mass)]) >= abundances[3]:
@@ -129,9 +136,8 @@ for mass in mass_old1[:-1]:
                 file_isotopes.append("\n" + mass + " Another molecule (see possible molecules)")  
         else:
             file_isotopes.append("\n" + mass + " Another molecule (see possible molecules)")
-    if not noNitrogen():
+    elif not noNitrogen():
         multiplyBy = int(float(mass)/14)
-        print multiplyBy
         if (14*multiplyBy)+1 or (14*multiplyBy)+1.1 or (14*multiplyBy)+1.2 or (14*multiplyBy)+.9 in mass_old1:
             if isAround(intensities[mass_old1.index(mass)], intensities[(mass_old1.index(mass))+1], abundances[5]*multiplyBy):
                 file_isotopes.append("\n" + mass+ " Isotope is: " + isotopes[5])
@@ -141,9 +147,8 @@ for mass in mass_old1[:-1]:
                 file_isotopes.append("\n" + mass + " Another molecule (see possible molecules)")
         else:
             file_isotopes.append("\n" + mass + " Another molecule (see possible molecules)")
-    if not noOxygen():
+    elif not noOxygen():
         multiplyBy = int(float(mass)/16)
-        print multiplyBy
         if (16*multiplyBy)+1 or (16*multiplyBy)+1.1 or (16*multiplyBy)+1.2 or (16*multiplyBy)+.9 in mass_old1:
             if isAround(intensities[mass_old1.index(mass)], intensities[(mass_old1.index(mass))+1], abundances[7]*multiplyBy):
                 file_isotopes.append("\n" + mass+ " Isotope is: " + isotopes[7])
