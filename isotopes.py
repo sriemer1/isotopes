@@ -135,7 +135,7 @@ def getMassPlus(mass):
             return mass+.9
              
 for i in range(len(isotope_masses)):
-    if not noCarbon(mass[i]) and not noNitrogen(mass[i]) and not noOxygen(mass[i]):
+    if not noCarbon(isotope_masses[i]) and not noNitrogen(isotope_masses[i]) and not noOxygen(isotope_masses[i]):
         multiplyByC = int(molecules[i[0:2]])
         multiplyByN = int(molecules[i[2:4]])
         multiplyByO = int(molecules[i[4:6]])
@@ -153,11 +153,11 @@ for i in range(len(isotope_masses)):
                     file_isotopes.append("Isotope is: O-18")
                 else:
                     file_isotopes.append("Mix of isotopes")
-    elif not noCarbon(mass[i]) and not noNitrogen(mass[i]):
+    elif not noCarbon(isotope_masses[i]) and not noNitrogen(isotope_masses[i]):
         
-    elif not noNitrogen(mass[i]) and not noOxygen(mass[i]):
+    elif not noNitrogen(isotope_masses[i]) and not noOxygen(isotope_masses[i]):
         
-    elif not noCarbon(mass[i]) and not noOxygen(mass[i]):
+    elif not noCarbon(isotope_masses[i]) and not noOxygen(isotope_masses[i]):
     
     elif not noCarbon(isotope_masses[i]):
         multiplyByC = int(molecules[i[0:2]])
@@ -170,7 +170,7 @@ for i in range(len(isotope_masses)):
                 file_isotopes.append("\n" + mass + " Another molecule (see possible molecules)")  
         else:
             file_isotopes.append("\n" + mass + " Another molecule (see possible molecules)")
-    elif not noNitrogen():
+    elif not noNitrogen(isotope_masses[i]):
         multiplyBy = int(float(mass)/14)
         if (14*multiplyBy)+1 or (14*multiplyBy)+1.1 or (14*multiplyBy)+1.2 or (14*multiplyBy)+.9 in mass_old1:
             if isAround(intensities[mass_old1.index(mass)], intensities[(mass_old1.index(mass))+1], abundances[5]*multiplyBy):
@@ -181,7 +181,7 @@ for i in range(len(isotope_masses)):
                 file_isotopes.append("\n" + mass + " Another molecule (see possible molecules)")
         else:
             file_isotopes.append("\n" + mass + " Another molecule (see possible molecules)")
-    elif not noOxygen():
+    elif not noOxygen(isotope_masses[i]):
         multiplyBy = int(float(mass)/16)
         if (16*multiplyBy)+1 or (16*multiplyBy)+1.1 or (16*multiplyBy)+1.2 or (16*multiplyBy)+.9 in mass_old1:
             if isAround(intensities[mass_old1.index(mass)], intensities[(mass_old1.index(mass))+1], abundances[7]*multiplyBy):
