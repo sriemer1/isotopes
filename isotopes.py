@@ -124,23 +124,35 @@ def isAround(intensity1, intensity2, abundance):
     else:
         return False
 
+def getMassPlus(mass):
+        if mass+1 in isotope_masses:
+            return mass+1
+        elif mass+1.1 in isotope_masses:
+            return mass+1.1
+        elif mass+1.2 in isotope_masses:
+            return mass+1.2
+        elif mass+.9 in isotope_masses:
+            return mass+.9
+             
 for i in range(len(isotope_masses)):
     if not noCarbon(mass[i]) and not noNitrogen(mass[i]) and not noOxygen(mass[i]):
-        multiplyByC = int(molecule[i[0:2]])
-        multiplyByN = int(molecule[i[2:4]])
-        multiplyByO = int(molecule[i[4:6]])
-        multiplyByH = int(molecule[i[6:]])
+        multiplyByC = int(molecules[i[0:2]])
+        multiplyByN = int(molecules[i[2:4]])
+        multiplyByO = int(molecules[i[4:6]])
+        multiplyByH = int(molecules[i[6:]])
         if ((12.0107*multiplyByC)+(14.00674*multiplyByN)+(15.994915*multiplyByO)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
-            if mass[i+1]/mass[i] == multiplyByC * .0107:
-                file_isotopes.append("Isotope is: C-13")
-            elif mass[i+1]/mass[i] == multiplyByN * .00364:
-                file_isotopes.append("Isotope: is N-15")
-            elif mass[i+1]/mass[i] == multiplyByO * .00038:
-                file_isotopes.append("Isotope is: O-17")
-            elif mass[i+1]/mass[i] == multiplyByO * .00205:
-                file_isotopes.append("Isotope is: O-18")
-            else:
-                file_isotopes.append("Mix of isotopes")
+            if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in isotope_masses:
+                nextMass = getMassPlus(isotope_masses[i])
+                if intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByC * .0107:
+                    file_isotopes.append("Isotope is: C-13")
+                elif intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByN * .00364:
+                    file_isotopes.append("Isotope: is N-15")
+                elif intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByO * .00038:
+                    file_isotopes.append("Isotope is: O-17")
+                elif intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByO * .00205:
+                    file_isotopes.append("Isotope is: O-18")
+                else:
+                    file_isotopes.append("Mix of isotopes")
     elif not noCarbon(mass[i]) and not noNitrogen(mass[i]):
         
     elif not noNitrogen(mass[i]) and not noOxygen(mass[i]):
