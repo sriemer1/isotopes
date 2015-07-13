@@ -95,7 +95,6 @@ isotope_masses1=[]
 for element in possible_mols[2:]:
   isotope_masses1.append(element[0:5]) 
 isotope_masses = [float(i) for i in isotope_masses1]
-print isotope_masses
 
 molecules = []
 for element in possible_mols[2:]:
@@ -129,23 +128,23 @@ def isAround(intensity1, intensity2, abundance):
         return False
 
 def getMassPlus(mass):
-        if mass+1 in isotope_masses:
-            return mass+1
-        elif mass+1.1 in isotope_masses:
-            return mass+1.1
-        elif mass+1.2 in isotope_masses:
-            return mass+1.2
-        elif mass+.9 in isotope_masses:
-            return mass+.9
+    if mass+1 in mass_old1:
+        return mass+1
+    elif mass+1.1 in mass_old1:
+        return mass+1.1
+    elif mass+1.2 in mass_old1:
+        return mass+1.2
+    elif mass+.9 in mass_old1:
+        return mass+.9
 
 def getMassPlusTwo(mass):
-    if mass+2 in isotope_masses:
+    if mass+2 in mass_old1:
         return mass+2
-    elif mass+2.1 in isotope_masses:
+    elif mass+2.1 in mass_old1:
         return mass+2.1
-    elif mass+2.2 in isotope_masses:
+    elif mass+2.2 in mass_old1:
         return mass+2.2
-    elif mass+1.9 in isotope_masses:
+    elif mass+1.9 in mass_old1:
         return mass+1.9
 
 def hasDoubleDig(element):
@@ -277,6 +276,7 @@ for i in range(len(isotope_masses)):
         if ((12.0107*multiplyByC)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
             if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old1:
                 nextMass = getMassPlus(isotope_masses[i])
+                print nextMass
                 if intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByC * .0107:
                     file_isotopes.append("Isotope is: C-13")
                 else:
