@@ -104,23 +104,23 @@ for element in possible_mols[2:]:
 def noCarbon(molecule):
     for molecule in molecules:
         if 'C0' in molecule:
-            return False
-        else:
             return True
+        else:
+            return False
             
 def noNitrogen(molecule):
     for molecule in molecules:
         if 'N0' in molecule:
-            return False
-        else:
             return True
+        else:
+            return False
             
 def noOxygen(molecule):
     for molecule in molecules:
         if 'O0' in molecules:
-            return False
-        else:
             return True
+        else:
+            return False
 
 def isAround(intensity1, intensity2, abundance):
     if abs(float(intensity1)*abundance) == abs(float(intensity2))+.000000005 or abs(float(intensity2))-.000000005:
@@ -288,7 +288,6 @@ for i in range(len(isotope_masses)):
         if ((14.00674*multiplyByN)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
             if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old1:
                 nextMass = getMassPlus(isotope_masses[i])
-                print isotope_masses[i]
                 if intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByN * .00364:
                     file_isotopes.append("Isotope: is N-15") 
                 else:
