@@ -117,7 +117,7 @@ def noNitrogen(molecule):
             
 def noOxygen(molecule):
     for molecule in molecules:
-        if 'O0' in molecules:
+        if 'O0' in molecule:
             return True
         else:
             return False
