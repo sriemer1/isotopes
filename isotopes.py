@@ -136,12 +136,14 @@ def getMassPlus(mass):
              
 for i in range(len(isotope_masses)):
     if not noCarbon(isotope_masses[i]) and not noNitrogen(isotope_masses[i]) and not noOxygen(isotope_masses[i]):
+        #gets number of atoms of each element
         multiplyByC = int(molecules[i[0:2]])
         multiplyByN = int(molecules[i[2:4]])
         multiplyByO = int(molecules[i[4:6]])
         multiplyByH = int(molecules[i[6:]])
+        #check to see if molecular mass equals a mass from RGA data
         if ((12.0107*multiplyByC)+(14.00674*multiplyByN)+(15.994915*multiplyByO)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
-            if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in isotope_masses:
+            if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in isotope_masses:  #checks to see if mass+1 is in RGA data
                 nextMass = getMassPlus(isotope_masses[i])
                 if intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByC * .0107:
                     file_isotopes.append("Isotope is: C-13")
@@ -149,7 +151,10 @@ for i in range(len(isotope_masses)):
                     file_isotopes.append("Isotope: is N-15")
                 elif intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByO * .00038:
                     file_isotopes.append("Isotope is: O-17")
-                elif intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByO * .00205:
+                else:
+                    file_isotopes.append("Mix of isotopes")
+            if isotope_masses[i]+2 or isotope_masses[i]+2.1 or isotope_masses[i]+2.2 or isotope_masses[i]+1.9 in isotope_masses: #separate check for O-18 isotope, checks mass+2
+                if intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByO * .00205:
                     file_isotopes.append("Isotope is: O-18")
                 else:
                     file_isotopes.append("Mix of isotopes")
