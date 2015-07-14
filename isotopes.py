@@ -75,6 +75,7 @@ with open(filename2) as f2: #opens RGA data file
         mass_old1.append(nm2[i])
     for i in range (1, len(nm2), 2):
         intensities.append(nm2[i])
+mass_old2 = [float(i) for i in mass_old1]    
         
 os.chdir(owd) #back to original working directory (wherever allmol file is) 
                        
@@ -94,7 +95,7 @@ file_isotopes = []  #to store the isotopes to put into the file
 isotope_masses1=[]
 for element in possible_mols[2:]:
   isotope_masses1.append(element[0:5]) 
-isotope_masses = [float(i) for i in isotope_masses1]
+isotope_masses = [float(i) for i in isotope_masses1] 
 
 molecules = []
 for element in possible_mols[2:]:
@@ -128,23 +129,23 @@ def isAround(intensity1, intensity2, abundance):
         return False
 
 def getMassPlus(mass):
-    if mass+1 in mass_old1:
+    if mass+1 in mass_old2:
         return mass+1
-    elif mass+1.1 in mass_old1:
+    elif mass+1.1 in mass_old2:
         return mass+1.1
-    elif mass+1.2 in mass_old1:
+    elif mass+1.2 in mass_old2:
         return mass+1.2
-    elif mass+.9 in mass_old1:
+    elif mass+.9 in mass_old2:
         return mass+.9
 
 def getMassPlusTwo(mass):
-    if mass+2 in mass_old1:
+    if mass+2 in mass_old2:
         return mass+2
-    elif mass+2.1 in mass_old1:
+    elif mass+2.1 in mass_old2:
         return mass+2.1
-    elif mass+2.2 in mass_old1:
+    elif mass+2.2 in mass_old2:
         return mass+2.2
-    elif mass+1.9 in mass_old1:
+    elif mass+1.9 in mass_old2:
         return mass+1.9
 
 def hasDoubleDig(element):
@@ -199,19 +200,19 @@ for i in range(len(isotope_masses)):
                     multiplyByH = int(molecules[i][7:])
         #check to see if molecular mass equals a mass from RGA data
         if ((12.0107*multiplyByC)+(14.00674*multiplyByN)+(15.994915*multiplyByO)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
-            if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old1:  #checks to see if mass+1 is in RGA data
+            if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old2:  #checks to see if mass+1 is in RGA data
                 nextMass = getMassPlus(isotope_masses[i])
-                if intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByC * .0107:
+                if float(intensities[mass_old2.index(nextMass)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByC * .0107:
                     file_isotopes.append("Isotope is: C-13")
-                elif intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByN * .00364:
+                elif float(intensities[mass_old2.index(nextMass)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByN * .00364:
                     file_isotopes.append("Isotope: is N-15")
-                elif intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByO * .00038:
+                elif float(intensities[mass_old2.index(nextMass)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByO * .00038:
                     file_isotopes.append("Isotope is: O-17")
                 else:
                     file_isotopes.append("Mix of isotopes")
-            if isotope_masses[i]+2 or isotope_masses[i]+2.1 or isotope_masses[i]+2.2 or isotope_masses[i]+1.9 in mass_old1: #separate check for O-18 isotope, checks mass+2
+            if isotope_masses[i]+2 or isotope_masses[i]+2.1 or isotope_masses[i]+2.2 or isotope_masses[i]+1.9 in mass_old2: #separate check for O-18 isotope, checks mass+2
                 nextMassTwo = getMassPlusTwo(isotope_masses[i])
-                if intensities[mass_old1.index(nextMassTwo)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByO * .00205:
+                if float(intensities[mass_old2.index(nextMassTwo)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByO * .00205:
                     file_isotopes.append("Isotope is: O-18")
                 else:
                     file_isotopes.append("Mix of isotopes")
@@ -221,11 +222,11 @@ for i in range(len(isotope_masses)):
         multiplyByN = int(molecules[i][3])
         multiplyByH = int(molecules[i][7:])
         if ((12.0107*multiplyByC)+(14.00674*multiplyByN)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
-            if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old1:
+            if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old2:
                 nextMass = getMassPlus(isotope_masses[i])
-                if intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByC * .0107:
+                if float(intensities[mass_old2.index(nextMass)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByC * .0107:
                     file_isotopes.append("Isotope is: C-13")
-                elif intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByN * .00364:
+                elif float(intensities[mass_old2.index(nextMass)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByN * .00364:
                     file_isotopes.append("Isotope: is N-15")
                 else:
                     file_isotopes.append("Mix of isotopes")
@@ -235,17 +236,17 @@ for i in range(len(isotope_masses)):
         multiplyByO = int(molecules[i][5])
         multiplyByH = int(molecules[i][7:])
         if ((14.00674*multiplyByN)+(15.994915*multiplyByO)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5: 
-          if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old1:
+          if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old2:
             nextMass = getMassPlus(isotope_masses[i])
-            if intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByN * .00364:
+            if float(intensities[mass_old2.index(nextMass)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByN * .00364:
                 file_isotopes.append("Isotope: is N-15")
-            elif intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByO * .00038:
+            elif float(intensities[mass_old2.index(nextMass)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByO * .00038:
                 file_isotopes.append("Isotope is: O-17")  
             else:
                 file_isotopes.append("Mix of isotopes")
-          if isotope_masses[i]+2 or isotope_masses[i]+2.1 or isotope_masses[i]+2.2 or isotope_masses[i]+1.9 in mass_old1:
+          if isotope_masses[i]+2 or isotope_masses[i]+2.1 or isotope_masses[i]+2.2 or isotope_masses[i]+1.9 in mass_old2:
               nextMassTwo = getMassPlusTwo(isotope_masses[i]) 
-              if intensities[mass_old1.index(nextMassTwo)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByO * .00205:
+              if float(intensities[mass_old2.index(nextMassTwo)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByO * .00205:
                   file_isotopes.append("Isotope is: O-18")
               else:
                   file_isotopes.append("Mix of isotopes")
@@ -255,17 +256,17 @@ for i in range(len(isotope_masses)):
         multiplyByO = int(molecules[i][5])
         multiplyByH = int(molecules[i][7:])
         if ((12.0107*multiplyByC)+(15.994915*multiplyByO)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
-            if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old1:  
+            if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old2:  
                 nextMass = getMassPlus(isotope_masses[i])
-                if intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByC * .0107:
+                if float(intensities[mass_old2.index(nextMass)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByC * .0107:
                     file_isotopes.append("Isotope is: C-13")
-                elif intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByO * .00038:
+                elif float(intensities[mass_old2.index(nextMass)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByO * .00038:
                     file_isotopes.append("Isotope is: O-17")
                 else:
                   file_isotopes.append("Mix of isotopes")
-            if isotope_masses[i]+2 or isotope_masses[i]+2.1 or isotope_masses[i]+2.2 or isotope_masses[i]+1.9 in mass_old1:
+            if isotope_masses[i]+2 or isotope_masses[i]+2.1 or isotope_masses[i]+2.2 or isotope_masses[i]+1.9 in mass_old2:
                 nextMassTwo = getMassPlusTwo(isotope_masses[i])
-                if intensities[mass_old1.index(nextMassTwo)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByO * .00205:
+                if float(intensities[mass_old2.index(nextMassTwo)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByO * .00205:
                     file_isotopes.append("Isotope is: O-18")
                 else:
                     file_isotopes.append("Mix of isotopes")   
@@ -274,10 +275,10 @@ for i in range(len(isotope_masses)):
         multiplyByC = int(molecules[i][1])
         multiplyByH = int(molecules[i][7:])
         if ((12.0107*multiplyByC)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
-            if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old1:
+            if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old2:
                 nextMass = getMassPlus(isotope_masses[i])
-                print nextMass
-                if intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByC * .0107:
+                print isotope_masses[i]
+                if float(intensities[mass_old2.index(nextMass)])/float(intensities[mass_old2.index(isotope_masses[i])]) == multiplyByC * .0107:
                     file_isotopes.append("Isotope is: C-13")
                 else:
                     file_isotopes.append("Mix of isotopes")
@@ -286,9 +287,9 @@ for i in range(len(isotope_masses)):
         multiplyByN = int(molecules[i][3])
         multiplyByH = int(molecules[i][7:])
         if ((14.00674*multiplyByN)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
-            if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old1:
+            if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old2:
                 nextMass = getMassPlus(isotope_masses[i])
-                if intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByN * .00364:
+                if float(intensities[mass_old2.index(nextMass)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByN * .00364:
                     file_isotopes.append("Isotope: is N-15") 
                 else:
                     file_isotopes.append("Mix of isotopes")   
@@ -297,15 +298,15 @@ for i in range(len(isotope_masses)):
         multiplyByO = int(molecules[i][5])
         multiplyByH = int(molecules[i][7:])
         if ((15.994915*multiplyByO)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
-            if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old1:
+            if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old2:
                 nextMass = getMassPlus(isotope_masses[i])
-                if intensities[mass_old1.index(nextMass)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByO * .00038:
+                if float(intensities[mass_old2.index(nextMass)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByO * .00038:
                     file_isotopes.append("Isotope is: O-17")
                 else:
                   file_isotopes.append("Mix of isotopes")
-            if isotope_masses[i]+2 or isotope_masses[i]+2.1 or isotope_masses[i]+2.2 or isotope_masses[i]+1.9 in mass_old1: 
+            if isotope_masses[i]+2 or isotope_masses[i]+2.1 or isotope_masses[i]+2.2 or isotope_masses[i]+1.9 in mass_old2: 
                 nextMassTwo = getMassPlusTwo(isotope_masses[i])
-                if intensities[mass_old1.index(nextMassTwo)]/intensities[mass_old1.index(isotopes_masses[i])] == multiplyByO * .00205:
+                if float(intensities[mass_old2.index(nextMassTwo)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByO * .00205:
                     file_isotopes.append("Isotope is: O-18")
                 else:
                     file_isotopes.append("Mix of isotopes")
