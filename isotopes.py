@@ -172,19 +172,22 @@ def getMassPlusTwo(mass):
 """
 def hasDoubleDig(element):
     if element == 'C':
-        if type(int(molecules[i][1:3])) is int:
+        try:
+            int(molecules[i][1:3])
             return True
-        else:
+        except:
             return False
     elif element == 'N':
-        if type(int(molecules[i][3:5])) is int:
+        try:
+            int(molecules[i][3:5])
             return True
-        else:
+        except:
             return False
     elif element == 'O':
-        if type(int(molecules[i][5:7])) is int:
+        try:
+            int(molecules[i][5:7])
             return True
-        else:
+        except:
             return False
              
 for i in range(len(isotope_masses)):
