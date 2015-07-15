@@ -241,9 +241,22 @@ for i in range(len(isotope_masses)):
                     file_isotopes.append("Mix of isotopes")
                     
     elif not noCarbon(molecules[i]) and not noNitrogen(molecules[i]):  #molecule has carbon, nitrogen and possible hydrogen
-        multiplyByC = int(molecules[i][1])
-        multiplyByN = int(molecules[i][3])
-        multiplyByH = int(molecules[i][7:])
+        if hasDoubleDig('C'):
+            multiplyByC = int(molecules[i][1:3])
+            if hasDoubleDig('N'):
+                multiplyByN = int(molecules[i][4:6])
+                multiplyByH = int(molecules[i][9:])
+            else:
+                multiplyByN = int(molecules[i][4])
+                multiplyByH = int(molecules[i][8:])
+        else:
+            multiplyByC = int(molecules[i][1])
+            if hasDoubleDig('N'):
+                multiplyByN = int(molecules[i][3:5])
+                multiplyByH = int(molecules[i][8:])
+            else:
+                multiplyByN = int(molecules[i][3])
+                multiplyByH = int(molecules[i][7:])
         if ((12.0107*multiplyByC)+(14.00674*multiplyByN)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
             if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old2:
                 nextMass = getMassPlus(isotope_masses[i])
@@ -255,9 +268,22 @@ for i in range(len(isotope_masses)):
                     file_isotopes.append("Mix of isotopes")
                     
     elif not noNitrogen(molecules[i]) and not noOxygen(molecules[i]): #molecule has nitrogen, oxygen and possible hydrogen
-        multiplyByN = int(molecules[i][3])
-        multiplyByO = int(molecules[i][5])
-        multiplyByH = int(molecules[i][7:])
+        if hasDoubleDig('N'):
+            multiplyByN = int(molecules[i][3:5])
+            if hasDoubleDig('O'):
+                multiplyByO = int(molecules[i][6:8])
+                multiplyByH = int(molecules[i][9:])
+            else:
+                multiplyByO = int(molecules[i][6])
+                multiplyByH  = int(molecules[i][8])
+        else:
+            multiplyByN = int(molecules[i][3])
+            if hasDoubleDig('O'):
+                multiplyByO = int(molecules[i][5:7])
+                multiplyByH = int(molecules[i][8:])
+            else:
+                multiplyByO = int(molecules[i][5])
+                multiplyByH = int(molecules[i][7:])
         if ((14.00674*multiplyByN)+(15.994915*multiplyByO)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5: 
           if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old2:
             nextMass = getMassPlus(isotope_masses[i])
@@ -275,9 +301,22 @@ for i in range(len(isotope_masses)):
                   file_isotopes.append("Mix of isotopes")
                   
     elif not noCarbon(molecules[i]) and not noOxygen(molecules[i]):  #molecule has carbon, oxygen and possibly hydrogen
-        multiplyByC = int(molecules[i][1])
-        multiplyByO = int(molecules[i][5])
-        multiplyByH = int(molecules[i][7:])
+        if hasDoubleDig('C'):
+            multiplyByC = int(molecules[i][1:3])
+            if hasDoubleDig('O'):
+                multiplyByO = int(molecules[i][6:8])
+                multiplyByH = int(molecules[i][9:])
+            else:
+                multiplyByO = int(molecules[i][6])
+                multiplyByH = int(molecules[i][8:])
+        else:
+            multiplyByC = int(molecules[i][1])
+            if hasDoubleDig('O'):
+                multiplyByO = int(molecules[i][5:7])
+                multiplyByH = int(molecules[i][8:])
+            else:
+                multiplyByO = int(molecules[i][5])
+                multiplyByH = int(molecules[i][7:])
         if ((12.0107*multiplyByC)+(15.994915*multiplyByO)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
             if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old2:  
                 nextMass = getMassPlus(isotope_masses[i])
@@ -295,8 +334,12 @@ for i in range(len(isotope_masses)):
                     file_isotopes.append("Mix of isotopes")   
                        
     elif not noCarbon(molecules[i]):   #molecule has carbon and possibly hydrogen
-        multiplyByC = int(molecules[i][1])
-        multiplyByH = int(molecules[i][7:])
+        if hasDoubleDig('C'):
+            multiplyByC = int(molecules[i][1:3])
+            multiplyByH = int(molecules[i][8:])
+        else:
+            multiplyByC = int(molecules[i][1])
+            multiplyByH = int(molecules[i][7:])
         if ((12.0107*multiplyByC)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
             if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old2:
                 print i
@@ -308,8 +351,12 @@ for i in range(len(isotope_masses)):
                     file_isotopes.append("Mix of isotopes")
        
     elif not noNitrogen(molecules[i]):   #molecule has nitrogen and possibly hydrogen
-        multiplyByN = int(molecules[i][3])
-        multiplyByH = int(molecules[i][7:])
+        if hasDoubleDig('N'):
+            multiplyByN = int(molecules[i][3:5])
+            multiplyByH = int(molecules[i][8:])
+        else:
+            multiplyByN = int(molecules[i][3])
+            multiplyByH = int(molecules[i][7:])
         if ((14.00674*multiplyByN)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
             if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old2:
                 nextMass = getMassPlus(isotope_masses[i])
@@ -319,8 +366,12 @@ for i in range(len(isotope_masses)):
                     file_isotopes.append("Mix of isotopes")   
             
     elif not noOxygen(molecules[i]):    #molecule has oxygen and possible hydrogen
-        multiplyByO = int(molecules[i][5])
-        multiplyByH = int(molecules[i][7:])
+        if hasDoubleDig('O'):
+            multiplyByO = int(molecules[i][5:7])
+            multiplyByH = int(molecules[i][8:])
+        else:
+            multiplyByO = int(molecules[i][5])
+            multiplyByH = int(molecules[i][7:])
         if ((15.994915*multiplyByO)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
             if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old2:
                 nextMass = getMassPlus(isotope_masses[i])
