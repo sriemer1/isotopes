@@ -95,39 +95,51 @@ file_isotopes = []  #to store the isotopes to put into the file
 isotope_masses1=[]
 for element in possible_mols[2:]:
   isotope_masses1.append(element[0:5]) 
-isotope_masses = [float(i) for i in isotope_masses1] 
+isotope_masses = [float(i) for i in isotope_masses1] #list to store masses that have corresponding possible molecules
 
-molecules = []
+molecules = []  #list to store the possible molecules
 for element in possible_mols[2:]:
-    molecules.append(element[24:])
-   
+    molecules.append(element[24:])  
+
+"""
+    Determines whether or not the molecule contains Carbon
+    @param molecule   the molecule 
+    @return True if the molecule doesn't contiain carbon, False otherwise
+"""  
 def noCarbon(molecule):
     for molecule in molecules:
         if 'C0' in molecule:
             return True
         else:
             return False
-            
+"""
+    Determines whether or not the molecule contains Nitrogen
+    @param molecule   the molecule 
+    @return True if the molecule doesn't contiain nitrogen, False otherwise
+"""  
 def noNitrogen(molecule):
     for molecule in molecules:
         if 'N0' in molecule:
             return True
         else:
             return False
-            
+"""
+    Determines whether or not the molecule contains Oxygen
+    @param molecule   the molecule 
+    @return True if the molecule doesn't contiain oxygen, False otherwise
+"""              
 def noOxygen(molecule):
     for molecule in molecules:
         if 'O0' in molecule:
             return True
         else:
             return False
-
-def isAround(intensity1, intensity2, abundance):
-    if abs(float(intensity1)*abundance) == abs(float(intensity2))+.000000005 or abs(float(intensity2))-.000000005:
-        return True
-    else:
-        return False
-
+            
+"""
+    Gets the mass that may have an isotope of +1 neutron for C,N or O (if there is one)  
+    @param mass     the mass
+    @return  the mass +1
+"""
 def getMassPlus(mass):
     if mass+1 in mass_old2:
         return mass+1
@@ -138,6 +150,11 @@ def getMassPlus(mass):
     elif mass+.9 in mass_old2:
         return mass+.9
 
+"""
+    Gets the mass that may have an isotope of +2 neutron for O (if there is one)
+    @param mass     the mass
+    @return the mass+2
+"""
 def getMassPlusTwo(mass):
     if mass+2 in mass_old2:
         return mass+2
@@ -148,6 +165,11 @@ def getMassPlusTwo(mass):
     elif mass+1.9 in mass_old2:
         return mass+1.9
 
+"""
+    Checks if the number of carbons, nitrogens or oxygens is in double-digits
+    @param element  the element to check quantity of
+    @return     True if there are >9 of an element in a molecule, False otherwise
+"""
 def hasDoubleDig(element):
     if element == 'C':
         if type(int(molecules[i][1:3])) is int:
@@ -166,7 +188,7 @@ def hasDoubleDig(element):
             return False
              
 for i in range(len(isotope_masses)):
-    if not noCarbon(molecules[i]) and not noNitrogen(molecules[i]) and not noOxygen(molecules[i]):
+    if not noCarbon(molecules[i]) and not noNitrogen(molecules[i]) and not noOxygen(molecules[i]): #molecule has C,N,O and possible H
         #gets number of atoms of each element
         if hasDoubleDig('C'):
             multiplyByC = int(molecules[i][1:3])
@@ -202,6 +224,7 @@ for i in range(len(isotope_masses)):
         if ((12.0107*multiplyByC)+(14.00674*multiplyByN)+(15.994915*multiplyByO)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
             if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old2:  #checks to see if mass+1 is in RGA data
                 nextMass = getMassPlus(isotope_masses[i])
+                #checks if the ratio of the intensities equals the isotope abundance
                 if float(intensities[mass_old2.index(nextMass)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByC * .0107:
                     file_isotopes.append("Isotope is: C-13")
                 elif float(intensities[mass_old2.index(nextMass)])/float(intensities[mass_old2.index(isotopes_masses[i])]) == multiplyByN * .00364:
@@ -217,7 +240,7 @@ for i in range(len(isotope_masses)):
                 else:
                     file_isotopes.append("Mix of isotopes")
                     
-    elif not noCarbon(molecules[i]) and not noNitrogen(molecules[i]):
+    elif not noCarbon(molecules[i]) and not noNitrogen(molecules[i]):  #molecule has carbon, nitrogen and possible hydrogen
         multiplyByC = int(molecules[i][1])
         multiplyByN = int(molecules[i][3])
         multiplyByH = int(molecules[i][7:])
@@ -231,7 +254,7 @@ for i in range(len(isotope_masses)):
                 else:
                     file_isotopes.append("Mix of isotopes")
                     
-    elif not noNitrogen(molecules[i]) and not noOxygen(molecules[i]):
+    elif not noNitrogen(molecules[i]) and not noOxygen(molecules[i]): #molecule has nitrogen, oxygen and possible hydrogen
         multiplyByN = int(molecules[i][3])
         multiplyByO = int(molecules[i][5])
         multiplyByH = int(molecules[i][7:])
@@ -251,7 +274,7 @@ for i in range(len(isotope_masses)):
               else:
                   file_isotopes.append("Mix of isotopes")
                   
-    elif not noCarbon(molecules[i]) and not noOxygen(molecules[i]):
+    elif not noCarbon(molecules[i]) and not noOxygen(molecules[i]):  #molecule has carbon, oxygen and possibly hydrogen
         multiplyByC = int(molecules[i][1])
         multiplyByO = int(molecules[i][5])
         multiplyByH = int(molecules[i][7:])
@@ -271,19 +294,20 @@ for i in range(len(isotope_masses)):
                 else:
                     file_isotopes.append("Mix of isotopes")   
                        
-    elif not noCarbon(molecules[i]):
+    elif not noCarbon(molecules[i]):   #molecule has carbon and possibly hydrogen
         multiplyByC = int(molecules[i][1])
         multiplyByH = int(molecules[i][7:])
         if ((12.0107*multiplyByC)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
             if isotope_masses[i]+1 or isotope_masses[i]+1.1 or isotope_masses[i]+1.2 or isotope_masses[i]+.9 in mass_old2:
-                nextMass = getMassPlus(isotope_masses[i])
+                print i
                 print isotope_masses[i]
+                nextMass = getMassPlus(isotope_masses[i])
                 if float(intensities[mass_old2.index(nextMass)])/float(intensities[mass_old2.index(isotope_masses[i])]) == multiplyByC * .0107:
                     file_isotopes.append("Isotope is: C-13")
                 else:
                     file_isotopes.append("Mix of isotopes")
        
-    elif not noNitrogen(molecules[i]):
+    elif not noNitrogen(molecules[i]):   #molecule has nitrogen and possibly hydrogen
         multiplyByN = int(molecules[i][3])
         multiplyByH = int(molecules[i][7:])
         if ((14.00674*multiplyByN)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
@@ -294,7 +318,7 @@ for i in range(len(isotope_masses)):
                 else:
                     file_isotopes.append("Mix of isotopes")   
             
-    elif not noOxygen(molecules[i]):
+    elif not noOxygen(molecules[i]):    #molecule has oxygen and possible hydrogen
         multiplyByO = int(molecules[i][5])
         multiplyByH = int(molecules[i][7:])
         if ((15.994915*multiplyByO)+(1.00794*multiplyByH)) == isotope_masses[i]+.5 or isotope_masses[i]-.5:
@@ -340,4 +364,4 @@ print given_masses
                     """   
                                              
 print "\nProgram ended"
-os.chdir(owd)
+os.chdir(owd)  #change directory back to origin directory
