@@ -53,11 +53,13 @@ addToList(numO, 3)
 addToList(numH, 4)
 
 os.chdir("Mass spec data tables")  #changes directories to where file with processed RGA data is
-os.chdir("Data tables 20sccm 9 torr 1")
+flow = raw_input("Enter flow rate: ")
+torr = raw_input("Enter torr: ")
+runNum = raw_input("Enter run number: ")
+os.chdir("Data tables "+ flow+"sccm "+ torr+" torr "+runNum)
 
 ##### Collecting masses from RGA data #####
 date1 = raw_input("Enter file date (yyyy-mm-dd): ")
-runNum = raw_input("Enter run number: ")
 for i in os.listdir(os.getcwd()):
     if i.endswith("_peak_differences "+runNum+".txt") and i.startswith(date1):
         filename2 = i
@@ -408,12 +410,12 @@ for j in file_isotopes:
     w.writelines("%s\n" % j)
 w.close()  
 
-#### GRAPH #####                       
-"""given_masses1 = raw_input("Enter the masses you would like to see spectra for, separated by commas: ")
-new_gm= "".join(given_masses1)  
-given_masses = new_gm.split(",")
-print given_masses
-                    """   
+##### GRAPH ##### 
+"""generateGraph = True
+while (generateGraph):                      
+    given_mass = raw_input("Enter the mass you would like to see spectra for: ")"""
+
+              
                                              
 print "\nProgram ended"
 os.chdir(owd)  #change directory back to origin directory
