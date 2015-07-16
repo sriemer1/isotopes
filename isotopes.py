@@ -191,7 +191,7 @@ def hasDoubleDig(element):
             return False
              
 for i in range(len(isotope_masses)):
-    if not noCarbon(molecules[i]) and not noNitrogen(molecules[i]) and not noOxygen(molecules[i]): #molecule has C,N,O and possible H
+    if not noCarbon(molecules[i]) and not noNitrogen(molecules[i]) and not noOxygen(molecules[i]): #molecule has C,N,O and possibly H
         #gets number of atoms of each element
         if hasDoubleDig('C'):
             multiplyByC = int(molecules[i][1:3])
@@ -243,7 +243,7 @@ for i in range(len(isotope_masses)):
                 else:
                     file_isotopes.append(str(isotope_masses[i]) + " Mix of isotopes and/or molecules")
                     
-    elif not noCarbon(molecules[i]) and not noNitrogen(molecules[i]):  #molecule has carbon, nitrogen and possible hydrogen
+    elif not noCarbon(molecules[i]) and not noNitrogen(molecules[i]):  #molecule has carbon, nitrogen and possibly hydrogen
         if hasDoubleDig('C'):
             multiplyByC = int(molecules[i][1:3])
             if hasDoubleDig('N'):
@@ -270,7 +270,7 @@ for i in range(len(isotope_masses)):
                 else:
                     file_isotopes.append(str(isotope_masses[i]) + " Mix of isotopes and/or molecules")
                     
-    elif not noNitrogen(molecules[i]) and not noOxygen(molecules[i]): #molecule has nitrogen, oxygen and possible hydrogen
+    elif not noNitrogen(molecules[i]) and not noOxygen(molecules[i]): #molecule has nitrogen, oxygen and possibly hydrogen
         if hasDoubleDig('N'):
             multiplyByN = int(molecules[i][3:5])
             if hasDoubleDig('O'):
@@ -366,7 +366,7 @@ for i in range(len(isotope_masses)):
                 else:
                     file_isotopes.append(str(isotope_masses[i]) + " Mix of isotopes and/or molecules")   
             
-    elif not noOxygen(molecules[i]):    #molecule has oxygen and possible hydrogen
+    elif not noOxygen(molecules[i]):    #molecule has oxygen and possibly hydrogen
         if hasDoubleDig('O'):
             multiplyByO = int(molecules[i][5:7])
             multiplyByH = int(molecules[i][8:])
