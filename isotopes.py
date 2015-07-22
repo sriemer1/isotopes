@@ -11,7 +11,7 @@ import io
 from datetime import *
 
 owd = os.getcwd()  #gets original working directory where allmol file is
-
+"""
 #initializes lists for masses, #C, #N, #O, and #H from allmol file
 masses = [] 
 numC = []
@@ -34,13 +34,13 @@ for i in range(0, len(data1)): #makes all data into separate numbers for list pr
 newData= " ".join(txt)  
 nd1 = newData.split()
 
-"""
+""""""
     Adds elements from list nd1 to a new list based on start index and step. 
     To be used to make list of masses, #C, #N, #O, #H. Step size of 5 is used
     to separate mass, C, N, O, H.
     @param list_name    name of the list to append data to
     @param start    index to start reading data from in list nd1
-"""
+""""""
 def addToList(list_name, start):
     for i in range(start, len(nd1), 5):   
         list_name.append(nd1[i])
@@ -94,11 +94,11 @@ abundances = [.999885, .000115, .9893, .0107, .99636, .00364, .99757, .00038, .0
 isotopes =   ['H', 'Deuterium', 'C-12', 'C-13', 'N-14', 'N-15', 'O-16', 'O-17', 'O-18']
 file_isotopes = []  #to store the isotopes to put into the file
             
-"""
+""""""
     Gets the mass that may have an isotope of +1 neutron for C,N or O (if there is one)  
     @param mass     the mass
     @return  the mass +1
-"""
+""""""
 def getMassPlus(mass):
     if mass+1 in mass_old2:
         return mass+1
@@ -111,11 +111,11 @@ def getMassPlus(mass):
     elif mass+.8 in mass_old2:
         return mass+.8
 
-"""
+""""""
     Gets the mass that may have an isotope of +2 neutron for O (if there is one)
     @param mass     the mass
     @return the mass+2
-"""
+""""""
 def getMassPlusTwo(mass):
     if mass+2 in mass_old2:
         return mass+2
@@ -128,11 +128,11 @@ def getMassPlusTwo(mass):
     elif mass+1.8 in mass_old2:
         return mass+1.8
 
-"""
+""""""
     Checks if the number of carbons, nitrogens or oxygens is in double-digits
     @param element  the element to check quantity of
     @return     True if there are >9 of an element in a molecule, False otherwise
-"""
+""""""
 def hasDoubleDig(element):
     if element == 'C':
         try:
@@ -249,10 +249,52 @@ for j in file_isotopes:
     w.writelines("%s\n" % j)
 w.close()  
 
-##### GRAPH ##### 
-"""generateGraph = True
+"""
+
+##### GRAPH #####
+
+def equalsMass(filename, mass):
+    totalMass = 0
+    if 'H' in filename:
+        if filename[filename.index('H')+1].isnumeric():
+            H = int(filename[filename.index('H')+1])
+            totalMass+=1*H
+    if 'N' in filename:
+        if filename[filename.index('N')+1].isnumeric():
+            N = int(filename[filename.index('N')+1])
+            totalMass+=14*N
+    if 'C' in filename:
+        if filename[filename.index('C')+1].isnumeric():
+            C = int(filename[filename.index('C')+1])
+            totalMass+=12*C
+    if 'O' in filename:
+        if filename[filename.index('O')+1].isnumeric():
+            O = int(filename[filename.index('C')+1])
+            totalMass+=16*O
+    if totalMass == mass:
+        return True
+    else:
+        return False
+
+spectrum = []
+os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
+generateGraph = True
 while (generateGraph):                      
-    given_mass = raw_input("Enter the mass you would like to see spectra for: ")"""
-                                            
-print "\nProgram ended"
+    given_mass = raw_input("Enter the mass you would like to see spectra for: ")
+    for fname in os.getcwd():
+        if equalsMass(fname, given_mass):
+            with open(fname, 'rb') as f: 
+                for i in range(25):
+                    f.next()
+                data = csv.reader(f, delimiter=', ')
+                for i in data:
+                    spectrum.append(i[1])
+    print spectrum
+
+    answer = raw_input("Would you like to enter another mass (y/n)? ")
+    if answer == 'y' or answer == 'Y':
+        generateGraph = True
+    elif answer == 'n' or answer == 'N':
+        generateGraph = False                           
+        print "\nProgram ended"
 os.chdir(owd)  #change directory back to origin directory
