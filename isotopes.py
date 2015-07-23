@@ -287,7 +287,7 @@ def isMatch(filename, mass):
         totalMass+=0
     if 'O' in filename:
         if filename[filename.index('O')+1].isdigit():
-            O = int(filename[filename.index('C')+1])
+            O = int(filename[filename.index('O')+1])
             totalMass+=(16*O)
         else:
             totalMass+=16
@@ -331,7 +331,7 @@ def getMass(filename):
         totalMass+=0
     if 'O' in filename:
         if filename[filename.index('O')+1].isdigit():
-            O = int(filename[filename.index('C')+1])
+            O = int(filename[filename.index('O')+1])
             totalMass+=(16*O)
         else:
             totalMass+=16
