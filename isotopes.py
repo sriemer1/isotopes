@@ -309,21 +309,13 @@ while (generateGraph):
             fname = i
     print fname
     with open(fname, 'r') as f: 
-        for j in xrange(25):
+        for j in xrange(24):
             f.next()
         data = list(f)
-        #spectrum_mass = [int(x.split(',')[0].strip()) for x in data.split()]
-        #spectrum_intensity = [int(x.split(',')[1].strip()) for x in data.split()]
-        for line in f:
-            for readings in line.split(' '):
-                mass = readings.split(',')
-                intensity = readings.split(',')
-                spectrum_mass.append(int(mass.strip()))
-                spectrum_intensity.append(int(intensity.strip()))
-    print spectrum_mass
-    print "\n"
-    print spectrum_intensity
-
+        str_data = ''.join(data[:-1])
+        spectrum_mass = [int(x.split(',')[0].strip()) for x in str_data.split()]
+        spectrum_intensity = [int(x.split(',')[1].strip()) for x in str_data.split()]
+        
     answer = raw_input("Would you like to enter another mass (y/n)? ")
     if answer == 'y' or answer == 'Y':
         generateGraph = True
