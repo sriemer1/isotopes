@@ -253,48 +253,81 @@ w.close()
 
 ##### GRAPH #####
 
-def equalsMass(filename, mass):
+"""
+    Finds the file that has the data for the molecule with the given mass.
+    @param filename  name of the file being evaluated for mass
+    @param mass     the target mass
+    @return     True if file molecular mass corresponds to given mass, False otherwise
+"""
+def isMatch(filename, mass):
     totalMass = 0
     if 'H' in filename:
-        if filename[filename.index('H')+1].isnumeric():
+        if filename[filename.index('H')+1].isdigit():
             H = int(filename[filename.index('H')+1])
-            totalMass+=1*H
+            totalMass+=(1*H)
+        else:
+            totalMass+=1
+    else:
+        totalMass+=0
     if 'N' in filename:
-        if filename[filename.index('N')+1].isnumeric():
+        if filename[filename.index('N')+1].isdigit():
             N = int(filename[filename.index('N')+1])
-            totalMass+=14*N
+            totalMass+=(14*N)
+        else:
+            totalMass+=14
+    else:
+        totalMass+=0
     if 'C' in filename:
-        if filename[filename.index('C')+1].isnumeric():
+        if filename[filename.index('C')+1].isdigit():
             C = int(filename[filename.index('C')+1])
-            totalMass+=12*C
+            totalMass+=(12*C)
+        else:
+            totalMass+=12
+    else:
+        totalMass+=0
     if 'O' in filename:
-        if filename[filename.index('O')+1].isnumeric():
+        if filename[filename.index('O')+1].isdigit():
             O = int(filename[filename.index('C')+1])
-            totalMass+=16*O
+            totalMass+=(16*O)
+        else:
+            totalMass+=16
+    else:
+        totalMass+=0
     if totalMass == mass:
         return True
     else:
         return False
 
-spectrum = []
-os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
+spectrum_mass = []
+spectrum_intensity = []
+#os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
 generateGraph = True
 while (generateGraph):                      
     given_mass = raw_input("Enter the mass you would like to see spectra for: ")
-    for fname in os.getcwd():
-        if equalsMass(fname, given_mass):
-            with open(fname, 'rb') as f: 
-                for i in range(25):
-                    f.next()
-                data = csv.reader(f, delimiter=', ')
-                for i in data:
-                    spectrum.append(i[1])
-    print spectrum
+    for i in os.listdir(os.getcwd()):
+        if not isMatch(i, given_mass):
+            fname = i
+    print fname
+    with open(fname, 'r') as f: 
+        for j in xrange(25):
+            f.next()
+        data = list(f)
+        #spectrum_mass = [int(x.split(',')[0].strip()) for x in data.split()]
+        #spectrum_intensity = [int(x.split(',')[1].strip()) for x in data.split()]
+        for line in f:
+            for readings in line.split(' '):
+                mass = readings.split(',')
+                intensity = readings.split(',')
+                spectrum_mass.append(int(mass.strip()))
+                spectrum_intensity.append(int(intensity.strip()))
+    print spectrum_mass
+    print "\n"
+    print spectrum_intensity
 
     answer = raw_input("Would you like to enter another mass (y/n)? ")
     if answer == 'y' or answer == 'Y':
         generateGraph = True
     elif answer == 'n' or answer == 'N':
-        generateGraph = False                           
-        print "\nProgram ended"
+        generateGraph = False
+        print "\nProgram ended"                               
 os.chdir(owd)  #change directory back to origin directory
