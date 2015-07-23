@@ -298,15 +298,60 @@ def isMatch(filename, mass):
     else:
         return False
 
+def getMass(filename):
+    totalMass = 0
+    if 'H' in filename:
+        if filename[filename.index('H')+1].isdigit():
+            H = int(filename[filename.index('H')+1])
+            totalMass+=(1*H)
+        else:
+            totalMass+=1
+    else:
+        totalMass+=0
+    if 'N' in filename:
+        if filename[filename.index('N')+1].isdigit():
+            N = int(filename[filename.index('N')+1])
+            totalMass+=(14*N)
+        else:
+            totalMass+=14
+    else:
+        totalMass+=0
+    if 'C' in filename:
+        if filename[filename.index('C')+1].isdigit():
+            C = int(filename[filename.index('C')+1])
+            totalMass+=(12*C)
+        else:
+            totalMass+=12
+    else:
+        totalMass+=0
+    if 'O' in filename:
+        if filename[filename.index('O')+1].isdigit():
+            O = int(filename[filename.index('C')+1])
+            totalMass+=(16*O)
+        else:
+            totalMass+=16
+    else:
+        totalMass+=0
+    return totalMass   
+
 spectrum_mass = []
 spectrum_intensity = []
-#os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
+masses_on_file = []
+os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
+for i in os.listdir(os.getcwd()):
+    masses_on_file.append(getMass(i))
 generateGraph = True
-while (generateGraph):                      
-    given_mass = raw_input("Enter the mass you would like to see spectra for: ")
-    for i in os.listdir(os.getcwd()):
-        if isMatch(i, int(given_mass)):
-            fname = i
+while (generateGraph): 
+    while True:
+        given_mass = raw_input("Enter the mass you would like to see spectra for: ")
+        if int(given_mass) in masses_on_file: 
+                for i in os.listdir(os.getcwd()):
+                    if isMatch(i, int(given_mass)):
+                        fname = i   
+                break
+        else:
+            print "No molecule found with that mass. Try again."    
+                          
     with open(fname, 'r') as f:
         numbers = [] 
         for line in f:
