@@ -307,12 +307,12 @@ while (generateGraph):
     for i in os.listdir(os.getcwd()):
         if not isMatch(i, given_mass):
             fname = i
-    print fname
-    with open(fname, 'r') as f: 
-        for j in xrange(24):
-            f.next()
-        data = list(f)
-        str_data = ''.join(data[:-1])
+    with open(fname, 'r') as f:
+        numbers = [] 
+        for line in f:
+            if line[0].isdigit(): 
+                numbers.append(line)
+        str_data = ''.join(numbers)
         spectrum_mass = [int(x.split(',')[0].strip()) for x in str_data.split()]
         spectrum_intensity = [int(x.split(',')[1].strip()) for x in str_data.split()]
         
