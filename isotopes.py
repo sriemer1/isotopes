@@ -305,7 +305,7 @@ generateGraph = True
 while (generateGraph):                      
     given_mass = raw_input("Enter the mass you would like to see spectra for: ")
     for i in os.listdir(os.getcwd()):
-        if not isMatch(i, given_mass):
+        if isMatch(i, int(given_mass)):
             fname = i
     with open(fname, 'r') as f:
         numbers = [] 
