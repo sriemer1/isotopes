@@ -360,39 +360,30 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             break
         else:
             print "No molecule found with that mass. Try again."  #asks user for mass again until mass found
-    
-    for i in mols_on_file:
-        if getMass(i) == int(given_mass):
-            numSpectra+=1
-    print numSpectra
-    
-    runs = 0    
+       
     for i in mols_on_file:
         if isMatch(i, int(given_mass)):
             spectra_files.append(i)
-            runs+=1
             mols_on_file = mols_on_file[mols_on_file.index(i)+1:] 
-    print runs
-    print spectra_files
-    for i in spectra_files:                                           
+    
+    #creates list for the mass and list for the intensity. to be used for plotting
+    spectrum_mass = []
+    spectrum_intensity = []
+    for i in spectra_files:
+        spectrum_mass.append(i)  #to be able to identify which data belongs to which molecule
+        spectrum_intensity.append(i)                                          
         with open(i, 'r') as f:
             numbers = []  #list to store all mass spectrum data directly from file before being processed
             for line in f:
                 if line[0].isdigit():  #skips header in file
                     numbers.append(line)
-            str_data = ''.join(numbers)
-            #creates list for the mass and list for the intensity. to be used for plotting
-            spectrum_mass = [int(x.split(',')[0].strip()) for x in str_data.split()]
-            spectrum_intensity = [int(x.split(',')[1].strip()) for x in str_data.split()]
-            spectrum_mass.append(spectrum_mass)
-            spectrum_mass.append('||')
-            spectrum_intensity.append(spectrum_mass)
-            spectrum_intensity.append('||')
+            
+            str_data = ''.join(numbers) #makes numbers into a string so the data can be split up
+            #splits up data and adds it to lists
+            spectrum_mass.extend(int(x.split(',')[0].strip()) for x in str_data.split()) 
+            spectrum_intensity.extend(int(x.split(',')[1].strip()) for x in str_data.split())
             spectra_files = spectra_files[spectra_files.index(i)+1:]
-        
-    print spectrum_mass
-    print spectrum_intensity
-        
+   
     answer = raw_input("Would you like to enter another mass (y/n)? ")  #asks if user wants to see another spectrum
     if answer == 'y' or answer == 'Y':
         generateGraph = True
