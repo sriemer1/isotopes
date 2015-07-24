@@ -252,6 +252,8 @@ w.close()
 
 ##### GRAPH #####
 
+os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
+
 """
     Finds the file that has the data for the molecule with the given mass.
     @param filename  name of the file being evaluated for mass
@@ -357,7 +359,6 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     masses_on_file = []  #list to store all the molecular masses in reference spectra
     mols_on_file = []  #list to store all of the different molecules in the reference files
     spectra_files = []  #list to store the spectra for molecules with mass given by user
-    os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
 
     for i in os.listdir(os.getcwd()):
         masses_on_file.append(getMass(i))  #adds masses to masses_on_file
@@ -393,12 +394,10 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             str_data = ''.join(numbers) #makes numbers into a string so the data can be split up
             spectrum_mass.extend(int(x.split(',')[0].strip()) for x in str_data.split())  #splits up data and adds it to lists
             spectrum_intensity.extend(int(x.split(',')[1].strip()) for x in str_data.split())
-           
+    
     answer = raw_input("Would you like to enter another mass (y/n)? ")  #asks if user wants to see another spectrum
     if answer == 'y' or answer == 'Y':
         generateGraph = True
-        del spectrum_mass[:]
-        del spectrum_intensity[:]
     elif answer == 'n' or answer == 'N':
         generateGraph = False
         print "\nProgram ended"                               
