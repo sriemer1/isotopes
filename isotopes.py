@@ -261,37 +261,44 @@ w.close()
 def isMatch(filename, mass):
     totalMass = 0
     if 'H' in filename:
-        if filename[filename.index('H')+1].isdigit():
+        if filename[filename.index('H')+1].isdigit() and filename[filename.index('H')+2].isdigit():
+            H = int(filename[filename.index('H')+1:filename.index('H')+2])
+            totalMass+=(1*H)
+        elif filename[filename.index('H')+1].isdigit():  
             H = int(filename[filename.index('H')+1])
             totalMass+=(1*H)
         else:
             totalMass+=1
-    else:
-        totalMass+=0
+            
     if 'N' in filename:
-        if filename[filename.index('N')+1].isdigit():
+        if filename[filename.index('N')+1].isdigit() and filename[filename.index('N')+2].isdigit():
+            N = int(filename[filename.index('N')+1:filename.index('N')+2])
+            totalMass+=(14*N)
+        elif filename[filename.index('N')+1].isdigit():  
             N = int(filename[filename.index('N')+1])
             totalMass+=(14*N)
         else:
             totalMass+=14
-    else:
-        totalMass+=0
+        
     if 'C' in filename:
-        if filename[filename.index('C')+1].isdigit():
+        if filename[filename.index('C')+1].isdigit() and filename[filename.index('C')+2].isdigit():
+            C = int(filename[filename.index('C')+1:filename.index('C')+2])
+            totalMass+=(12*N)
+        elif filename[filename.index('C')+1].isdigit():  
             C = int(filename[filename.index('C')+1])
             totalMass+=(12*C)
         else:
             totalMass+=12
-    else:
-        totalMass+=0
+            
     if 'O' in filename:
-        if filename[filename.index('O')+1].isdigit():
+        if filename[filename.index('O')+1].isdigit() and filename[filename.index('O')+2].isdigit():
+            O = int(filename[filename.index('O')+1:filename.index('O')+2])
+            totalMass+=(16*O)
+        elif filename[filename.index('O')+1].isdigit():  
             O = int(filename[filename.index('O')+1])
             totalMass+=(16*O)
         else:
             totalMass+=16
-    else:
-        totalMass+=0
     if totalMass == mass:
         return True
     else:
@@ -305,54 +312,59 @@ def isMatch(filename, mass):
 def getMass(filename):
     totalMass = 0
     if 'H' in filename:
-        if filename[filename.index('H')+1].isdigit():
+        if filename[filename.index('H')+1].isdigit() and filename[filename.index('H')+2].isdigit():
+            H = int(filename[filename.index('H')+1:filename.index('H')+2])
+            totalMass+=(1*H)
+        elif filename[filename.index('H')+1].isdigit():  
             H = int(filename[filename.index('H')+1])
             totalMass+=(1*H)
         else:
             totalMass+=1
-    else:
-        totalMass+=0
     if 'N' in filename:
-        if filename[filename.index('N')+1].isdigit():
+        if filename[filename.index('N')+1].isdigit() and filename[filename.index('N')+2].isdigit():
+            N = int(filename[filename.index('N')+1:filename.index('N')+2])
+            totalMass+=(14*N)
+        elif filename[filename.index('N')+1].isdigit():  
             N = int(filename[filename.index('N')+1])
             totalMass+=(14*N)
         else:
             totalMass+=14
-    else:
-        totalMass+=0
     if 'C' in filename:
-        if filename[filename.index('C')+1].isdigit():
+        if filename[filename.index('C')+1].isdigit() and filename[filename.index('C')+2].isdigit():
+            C = int(filename[filename.index('C')+1:filename.index('C')+2])
+            totalMass+=(12*C)
+        elif filename[filename.index('C')+1].isdigit():  
             C = int(filename[filename.index('C')+1])
             totalMass+=(12*C)
         else:
             totalMass+=12
-    else:
-        totalMass+=0
     if 'O' in filename:
-        if filename[filename.index('O')+1].isdigit():
+        if filename[filename.index('O')+1].isdigit() and filename[filename.index('O')+2].isdigit():
+            O = int(filename[filename.index('O')+1:filename.index('O')+2])
+            totalMass+=(16*O)
+        elif filename[filename.index('O')+1].isdigit():  
             O = int(filename[filename.index('O')+1])
             totalMass+=(16*O)
         else:
             totalMass+=16
-    else:
-        totalMass+=0
     return totalMass   
-
-spectrum_mass = []  #list to store the masses for the spectrum
-spectrum_intensity = []  #list to store the relative intensities
-masses_on_file = []  #list to store all the molecular masses in reference spectra
-mols_on_file = []  #list to store all of the different molecules in the reference files
-spectra_files = []  #list to store the spectra for molecules with mass given by user
-os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
-
-for i in os.listdir(os.getcwd()):
-    masses_on_file.append(getMass(i))  #adds masses to masses_on_file
-for i in os.listdir(os.getcwd()):
-    mols_on_file.append(i)
-mols_on_file = mols_on_file[1:]  #gets rid of weird residual file
 
 generateGraph = True  
 while (generateGraph): #keeps running program if user wants to see more spectra
+    
+    spectrum_mass = []  #list to store the masses for the spectrum
+    spectrum_intensity = []  #list to store the relative intensities
+    masses_on_file = []  #list to store all the molecular masses in reference spectra
+    mols_on_file = []  #list to store all of the different molecules in the reference files
+    spectra_files = []  #list to store the spectra for molecules with mass given by user
+    os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
+
+    for i in os.listdir(os.getcwd()):
+        masses_on_file.append(getMass(i))  #adds masses to masses_on_file
+    for i in os.listdir(os.getcwd()):
+        mols_on_file.append(i)
+    mols_on_file = mols_on_file[1:]  #gets rid of weird residual file
+    
     while True:
         given_mass = raw_input("Enter the mass you would like to see the spectrum for: ")  #user enters mass
         if int(given_mass) in masses_on_file:
@@ -364,7 +376,7 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     for i in mols_on_file:
         if isMatch(i, int(given_mass)):
             spectra_files.append(i)
-            mols_on_file = mols_on_file[mols_on_file.index(i)+1:] 
+            mols_on_file = mols_on_file[mols_on_file.index(i)+1:] #searches for next molecule with given mass, if applicable
     
     #creates list for the mass and list for the intensity. to be used for plotting
     spectrum_mass = []
@@ -381,10 +393,12 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             str_data = ''.join(numbers) #makes numbers into a string so the data can be split up
             spectrum_mass.extend(int(x.split(',')[0].strip()) for x in str_data.split())  #splits up data and adds it to lists
             spectrum_intensity.extend(int(x.split(',')[1].strip()) for x in str_data.split())
-            
+           
     answer = raw_input("Would you like to enter another mass (y/n)? ")  #asks if user wants to see another spectrum
     if answer == 'y' or answer == 'Y':
         generateGraph = True
+        del spectrum_mass[:]
+        del spectrum_intensity[:]
     elif answer == 'n' or answer == 'N':
         generateGraph = False
         print "\nProgram ended"                               
