@@ -342,16 +342,16 @@ def getMass(filename):
 spectrum_mass = []  #list to store the masses for the spectrum
 spectrum_intensity = []  #list to store the relative intensities
 masses_on_file = []  #list to store all the molecular masses in reference spectra
-mols_on_file = []
-spectra_files = []
-numSpectra = 0
-#os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
+mols_on_file = []  #list to store all of the different molecules in the reference files
+spectra_files = []  #list to store the spectra for molecules with mass given by user
+os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
 
 for i in os.listdir(os.getcwd()):
     masses_on_file.append(getMass(i))  #adds masses to masses_on_file
 for i in os.listdir(os.getcwd()):
     mols_on_file.append(i)
-mols_on_file = mols_on_file[1:]
+mols_on_file = mols_on_file[1:]  #gets rid of weird residual file
+
 generateGraph = True  
 while (generateGraph): #keeps running program if user wants to see more spectra
     while True:
@@ -360,7 +360,8 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             break
         else:
             print "No molecule found with that mass. Try again."  #asks user for mass again until mass found
-       
+    
+   #gets the names of the molecules/files that match the mass given by the user   
     for i in mols_on_file:
         if isMatch(i, int(given_mass)):
             spectra_files.append(i)
