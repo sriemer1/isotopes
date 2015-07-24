@@ -342,31 +342,56 @@ def getMass(filename):
 spectrum_mass = []  #list to store the masses for the spectrum
 spectrum_intensity = []  #list to store the relative intensities
 masses_on_file = []  #list to store all the molecular masses in reference spectra
-os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
+mols_on_file = []
+spectra_files = []
+numSpectra = 0
+#os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
 
 for i in os.listdir(os.getcwd()):
     masses_on_file.append(getMass(i))  #adds masses to masses_on_file
+for i in os.listdir(os.getcwd()):
+    mols_on_file.append(i)
+mols_on_file = mols_on_file[1:]
 generateGraph = True  
 while (generateGraph): #keeps running program if user wants to see more spectra
     while True:
         given_mass = raw_input("Enter the mass you would like to see the spectrum for: ")  #user enters mass
-        if int(given_mass) in masses_on_file: 
-                for i in os.listdir(os.getcwd()):
-                    if isMatch(i, int(given_mass)):
-                        fname = i   
-                break  #breaks out of while loop and continues program
+        if int(given_mass) in masses_on_file:
+            break
         else:
-            print "No molecule found with that mass. Try again."  #asks user for mass again until mass found   
-                          
-    with open(fname, 'r') as f:
-        numbers = []  #list to store all mass spectrum data directly from file before being processed
-        for line in f:
-            if line[0].isdigit():  #skips header in file
-                numbers.append(line)
-        str_data = ''.join(numbers)
-        #creates list for the mass and list for the intensity. to be used for plotting
-        spectrum_mass = [int(x.split(',')[0].strip()) for x in str_data.split()]
-        spectrum_intensity = [int(x.split(',')[1].strip()) for x in str_data.split()]
+            print "No molecule found with that mass. Try again."  #asks user for mass again until mass found
+    
+    for i in mols_on_file:
+        if getMass(i) == int(given_mass):
+            numSpectra+=1
+    print numSpectra
+    
+    runs = 0    
+    for i in mols_on_file:
+        if isMatch(i, int(given_mass)):
+            spectra_files.append(i)
+            runs+=1
+            mols_on_file = mols_on_file[mols_on_file.index(i)+1:] 
+    print runs
+    print spectra_files
+    for i in spectra_files:                                           
+        with open(i, 'r') as f:
+            numbers = []  #list to store all mass spectrum data directly from file before being processed
+            for line in f:
+                if line[0].isdigit():  #skips header in file
+                    numbers.append(line)
+            str_data = ''.join(numbers)
+            #creates list for the mass and list for the intensity. to be used for plotting
+            spectrum_mass = [int(x.split(',')[0].strip()) for x in str_data.split()]
+            spectrum_intensity = [int(x.split(',')[1].strip()) for x in str_data.split()]
+            spectrum_mass.append(spectrum_mass)
+            spectrum_mass.append('||')
+            spectrum_intensity.append(spectrum_mass)
+            spectrum_intensity.append('||')
+            spectra_files = spectra_files[spectra_files.index(i)+1:]
+        
+    print spectrum_mass
+    print spectrum_intensity
         
     answer = raw_input("Would you like to enter another mass (y/n)? ")  #asks if user wants to see another spectrum
     if answer == 'y' or answer == 'Y':
