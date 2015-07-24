@@ -380,11 +380,9 @@ while (generateGraph): #keeps running program if user wants to see more spectra
                     numbers.append(line)
             
             str_data = ''.join(numbers) #makes numbers into a string so the data can be split up
-            #splits up data and adds it to lists
-            spectrum_mass.extend(int(x.split(',')[0].strip()) for x in str_data.split()) 
+            spectrum_mass.extend(int(x.split(',')[0].strip()) for x in str_data.split())  #splits up data and adds it to lists
             spectrum_intensity.extend(int(x.split(',')[1].strip()) for x in str_data.split())
-            spectra_files = spectra_files[spectra_files.index(i)+1:]
-   
+            
     answer = raw_input("Would you like to enter another mass (y/n)? ")  #asks if user wants to see another spectrum
     if answer == 'y' or answer == 'Y':
         generateGraph = True
