@@ -13,14 +13,7 @@ from datetime import *
 owd = os.getcwd()  #gets original working directory where allmol file is
 
 #initializes lists for masses, #C, #N, #O, and #H from allmol file
-masses = [] 
-numC = []
-numN = []
-numO = []
-numH = []
-#lists to store unsorted data
-data1 = []
-txt = []
+masses, numC, numN, numO, numH, data1, txt = ([] for i in range(7))
 
 with open("allmol_sort.txt", 'rb') as f1:     #opens file and reads it in
     for i in xrange(1):
@@ -252,6 +245,7 @@ w.close()
 
 ##### GRAPH #####
 
+os.chdir('/Users/'+username+'/Desktop') #change directory back to desktop
 os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
 
 """
@@ -379,21 +373,26 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             spectra_files.append(i)
             mols_on_file = mols_on_file[mols_on_file.index(i)+1:] #searches for next molecule with given mass, if applicable
     
-    #creates list for the mass and list for the intensity. to be used for plotting
-    spectrum_mass = []
-    spectrum_intensity = []
-    for i in spectra_files:
-        spectrum_mass.append(i)  #to be able to identify which data belongs to which molecule
-        spectrum_intensity.append(i)                                          
-        with open(i, 'r') as f:
+    #creates dictionary for the mass and list for the intensity. to be used for plotting
+    spectrum_mass = {}
+    spectrum_intensity = {}
+    
+    for i in range(len(spectra_files)): 
+        spectrum_mass_temp = []  #lists to store data for dictionaries
+        spectrum_intensity_temp = []                                         
+        with open(spectra_files[i], 'r') as f:
             numbers = []  #list to store all mass spectrum data directly from file before being processed
             for line in f:
                 if line[0].isdigit():  #skips header in file
                     numbers.append(line)
             
             str_data = ''.join(numbers) #makes numbers into a string so the data can be split up
-            spectrum_mass.extend(int(x.split(',')[0].strip()) for x in str_data.split())  #splits up data and adds it to lists
-            spectrum_intensity.extend(int(x.split(',')[1].strip()) for x in str_data.split())
+            spectrum_mass_temp.extend(int(x.split(',')[0].strip()) for x in str_data.split())  #splits up data and adds it to lists
+            spectrum_intensity_temp.extend(int(x.split(',')[1].strip()) for x in str_data.split())
+            spectrum_mass[spectra_files[i]] = spectrum_mass_temp  #adding the data to the dictionaries
+            spectrum_intensity[spectra_files[i]] = spectrum_intensity_temp
+
+    ###### PLOTTING goes here ######  
     
     answer = raw_input("Would you like to enter another mass (y/n)? ")  #asks if user wants to see another spectrum
     if answer == 'y' or answer == 'Y':
