@@ -427,7 +427,7 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     for i in spectra_files:
         ax1 = fig1.add_subplot(num) #creates subplots
         pyplot.bar(spectrum_mass[i], spectrum_intensity[i], width= .001, bottom = None, log = True) #adds data to plots
-        ax1.annotate(i[0:i.index('.')], xy=(.9,.8),xycoords='axes fraction',fontsize=13)  #labels subplots with molecule
+        ax1.annotate(i[0:i.index('.')], xy=(.9,.8),xycoords='axes fraction',fontsize=13, color = 'r')  #labels subplots with molecule
         num+=1  #goes to next row
     
     plt.xlabel('Mass (amu)')  #labels x axis
