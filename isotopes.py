@@ -2,6 +2,7 @@ import csv
 import os
 import getpass
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 from pylab import *
 import numpy as numpy
 import math
@@ -419,7 +420,6 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     plotIntensity = intensities[mass_old2.index(oldMass(given_mass))-10:mass_old2.index(float(oldMass(given_mass)))+10]
     fig1 = plt.figure(1)
     plt.subplot(311)
-    plt.xlabel('Mass (amu)')
     plt.ylabel('Intensity')
     pyplot.bar(plotMass, plotIntensity, width= .001, bottom = None, log = True)
     
@@ -427,7 +427,12 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     for i in spectra_files:
         plt.subplot(num)
         pyplot.bar(spectrum_mass[i], spectrum_intensity[i], width= .001, bottom = None, log = True)
+        patch = mpatches.Patch(label=i[0:i.index('.')])
+        plt.legend(handles=[patch])
         num+=1 
+    
+    plt.xlabel('Mass (amu)')  #labels x and y axes
+    plt.tight_layout()
     plt.show()   
     
     answer = raw_input("Would you like to enter another mass (y/n)? ")  #asks if user wants to see another spectrum
