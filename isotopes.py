@@ -391,8 +391,44 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             spectrum_intensity_temp.extend(int(x.split(',')[1].strip()) for x in str_data.split())
             spectrum_mass[spectra_files[i]] = spectrum_mass_temp  #adding the data to the dictionaries
             spectrum_intensity[spectra_files[i]] = spectrum_intensity_temp
-
-    ###### PLOTTING goes here ######  
+    
+    #turns the intensities into decimals
+    for i in spectrum_intensity:
+        spectrum_intensity[i] = [(j/10000.0) for j in spectrum_intensity[i]]
+    
+    """
+        Gets the floating point mass for given_mass.
+        @param mass   integer mass given by user
+        @return   the floating point mass
+    """    
+    def oldMass(mass):
+        if float(mass)+.1 in mass_old2:
+            return float(mass)+.1
+        elif float(mass)+.2 in mass_old2:
+            return float(mass)+.2
+        elif float(mass)-.1 in mass_old2:
+            return float(mass)-.1
+        elif float(mass)-.2 in mass_old2:
+            return float(mass)-.2
+        elif float(mass)+0 in mass_old2:
+            return int(mass)
+    
+    ###### PLOTTING goes here ###### 
+    intensities = [float(i) for i in intensities]  #makes the intensities numbers
+    plotMass = mass_old2[mass_old2.index(oldMass(given_mass))-10:mass_old2.index(float(oldMass(given_mass)))+10]  #gets the masses and intensities for range around given mass
+    plotIntensity = intensities[mass_old2.index(oldMass(given_mass))-10:mass_old2.index(float(oldMass(given_mass)))+10]
+    fig1 = plt.figure(1)
+    plt.subplot(311)
+    plt.xlabel('Mass (amu)')
+    plt.ylabel('Intensity')
+    pyplot.bar(plotMass, plotIntensity, width= .001, bottom = None, log = True)
+    
+    num = 312
+    for i in spectra_files:
+        plt.subplot(num)
+        pyplot.bar(spectrum_mass[i], spectrum_intensity[i], width= .001, bottom = None, log = True)
+        num+=1 
+    plt.show()   
     
     answer = raw_input("Would you like to enter another mass (y/n)? ")  #asks if user wants to see another spectrum
     if answer == 'y' or answer == 'Y':
