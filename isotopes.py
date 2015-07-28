@@ -245,9 +245,6 @@ w.close()
 
 ##### GRAPH #####
 
-os.chdir('/Users/'+username+'/Desktop') #change directory back to desktop
-os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
-
 def isMatch(filename, mass):
     """
     Finds the file that has the data for the molecule with the given mass.
@@ -348,6 +345,8 @@ def getMass(filename):
 generateGraph = True  
 while (generateGraph): #keeps running program if user wants to see more spectra
     
+    os.chdir('/Users/'+username+'/Desktop') #change directory back to desktop
+    os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
     masses_on_file = []  #list to store all the molecular masses in reference spectra
     mols_on_file = []  #list to store all of the different molecules in the reference files
     spectra_files = []  #list to store the spectra for molecules with mass given by user
@@ -411,7 +410,7 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         elif float(mass)-.2 in mass_old2:
             return float(mass)-.2
         elif float(mass)+0 in mass_old2:
-            return int(mass)
+            return float(mass)
     
     def oldMassMax(mass):
         """
@@ -421,7 +420,17 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         Takes param mass, the integer mass from reference spectra.
         Returns the floating point mass.
         """
-        if float(mass)+1 in mass_old2:
+        if float(mass)+.1 in mass_old2:
+            return float(mass)+.1
+        elif float(mass)+.2 in mass_old2:
+            return float(mass)+.2
+        elif float(mass)-.1 in mass_old2:
+            return float(mass)-.1
+        elif float(mass)-.2 in mass_old2:
+            return float(mass)-.2
+        elif float(mass)+0 in mass_old2:
+            return float(mass)
+        elif float(mass)+1 in mass_old2:
             return float(mass)+1
         elif float(mass)+1.1 in mass_old2:
             return float(mass)+1.1
@@ -431,6 +440,8 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             return float(mass)+.9
         elif float(mass)+.8 in mass_old2:
             return float(mass)+.8
+        elif float(mass)+0 in mass_old2:
+            return float(mass)
     
     def oldMassMin(mass):
         """
@@ -440,7 +451,17 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         Takes param mass, the integer mass from reference spectra.
         Returns the floating point mass.
         """
-        if float(mass)-1 in mass_old2:
+        if float(mass)+.1 in mass_old2:
+            return float(mass)+.1
+        elif float(mass)+.2 in mass_old2:
+            return float(mass)+.2
+        elif float(mass)-.1 in mass_old2:
+            return float(mass)-.1
+        elif float(mass)-.2 in mass_old2:
+            return float(mass)-.2
+        elif float(mass)+0 in mass_old2:
+            return float(mass)
+        elif float(mass)-1 in mass_old2:
             return float(mass)-1
         elif float(mass)-1.1 in mass_old2:
             return float(mass)-1.1
@@ -450,13 +471,15 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             return float(mass)-.9
         elif float(mass)-.8 in mass_old2:
             return float(mass)-.8
+        elif float(mass)+0 in mass_old2:
+            return float(mass)
     
     ###### PLOTTING goes here ###### 
     intensities = [float(i) for i in intensities]  #makes the intensities numbers
-    minMass = min(spectrum_mass_temp) #gets min and max mass to align x-axis
-    maxMass = max(spectrum_mass_temp)
+    minMass = float(min(spectrum_mass_temp)) #gets min and max mass to align x-axis
+    maxMass = float(max(spectrum_mass_temp))
     plotMass = mass_old2[mass_old2.index(oldMassMin(minMass)):mass_old2.index(oldMassMax(maxMass))]  #gets the masses and intensities for range around given mass
-    plotIntensity = intensities[mass_old2.index(float(oldMassMin(minMass))):mass_old2.index(float(oldMassMax(maxMass)))]
+    plotIntensity = intensities[mass_old2.index(oldMassMin(minMass)):mass_old2.index(oldMassMax(maxMass))]
     normFactor = 99.99/(max(plotIntensity))  #normalization factor to normalize RGA intensities
     plotIntensity = [i*(normFactor) for i in plotIntensity]  #normalizes the intensities
     fig1 = plt.figure(1)  
@@ -476,12 +499,21 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     
     plt.xlabel('Mass (amu)', fontsize = 14)  #labels x axis
     plt.tight_layout()  #organizes layout so there is no overlap
-    plt.show()   
+    
+    os.chdir('/Users/'+username+'/Desktop') #change directory back to desktop
+    try:
+        os.mkdir('comparative_spectra')  #makes new directory on desktop to hold plots if one isn't made already
+    except:
+        pass
+    os.chdir('comparative_spectra')
+    plt.savefig(date1+ ' ' + flow + 'sccm ' + torr + ' torr ' + runNum + ' Mass-' + given_mass) #saves plot to comparative_spectra  
+    plt.show() #shows plot on screen, interactive (can zoom in/out, rescale, etc.)
     
     answer = raw_input("Would you like to enter another mass (y/n)? ")  #asks if user wants to see another spectrum
     if answer == 'y' or answer == 'Y':
         generateGraph = True
+        plt.close()  #closes plot 
     elif answer == 'n' or answer == 'N':
         generateGraph = False
-        print "\nProgram ended"                               
+        print "\nProgram over"                               
 os.chdir(owd)  #change directory back to origin directory
