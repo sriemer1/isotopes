@@ -416,21 +416,26 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     
     ###### PLOTTING goes here ###### 
     intensities = [float(i) for i in intensities]  #makes the intensities numbers
-    plotMass = mass_old2[mass_old2.index(oldMass(given_mass))-10:mass_old2.index(float(oldMass(given_mass)))+10]  #gets the masses and intensities for range around given mass
-    plotIntensity = intensities[mass_old2.index(oldMass(given_mass))-10:mass_old2.index(float(oldMass(given_mass)))+10]
+    minMass = min(spectrum_mass_temp) #gets min and max mass to align x-axis
+    maxMass = max(spectrum_mass_temp)
+    plotMass = mass_old2[mass_old2.index(float(oldMass(minMass))):mass_old2.index(float(oldMass(maxMass)))]  #gets the masses and intensities for range around given mass
+    plotIntensity = intensities[mass_old2.index(float(oldMass(minMass))):mass_old2.index(float(oldMass(maxMass)))]
     fig1 = plt.figure(1)  
     plt.subplot(311)  #creates subplot with 3 rows
-    plt.ylabel('Intensity')  #labels y axis
+    if len(spectra_files) > 1:
+        fig1.text(0.01, 0.5, "Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
+    else:
+        fig1.text(0.01, 0.63, "Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
     pyplot.bar(plotMass, plotIntensity, width= .001, bottom = None, log = True, color = 'b', edgecolor = 'b')  #plots data
     
     num = 312  #keeps track of which row to plot data on
     for i in spectra_files:
         ax1 = fig1.add_subplot(num) #creates subplots
         pyplot.bar(spectrum_mass[i], spectrum_intensity[i], width= .001, bottom = None, log = True, color = 'r', edgecolor = 'r') #adds data to plots
-        ax1.annotate(i[0:i.index('.')], xy=(.9,.8),xycoords='axes fraction',fontsize=13, color = 'r')  #labels subplots with molecule
+        ax1.annotate(i[0:i.index('.')], xy=(.9,.8),xycoords='axes fraction',fontsize=13)  #labels subplots with molecule
         num+=1  #goes to next row
     
-    plt.xlabel('Mass (amu)')  #labels x axis
+    plt.xlabel('Mass (amu)', fontsize = 14)  #labels x axis
     plt.tight_layout()  #organizes layout so there is no overlap
     plt.show()   
     
