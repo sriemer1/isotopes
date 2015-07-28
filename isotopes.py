@@ -28,14 +28,13 @@ for i in range(0, len(data1)): #makes all data into separate numbers for list pr
 newData= " ".join(txt)  
 nd1 = newData.split()
 
-"""
+def addToList(list_name, start):
+    """
     Adds elements from list nd1 to a new list based on start index and step. 
     To be used to make list of masses, #C, #N, #O, #H. Step size of 5 is used
-    to separate mass, C, N, O, H.
-    @param list_name    name of the list to append data to
-    @param start    index to start reading data from in list nd1
-"""
-def addToList(list_name, start):
+    to separate mass, C, N, O, H. Takes parameters list_name, name of the list to append data to
+    and start, index to start reading data from in list nd1
+    """
     for i in range(start, len(nd1), 5):   
         list_name.append(nd1[i])
 
@@ -88,12 +87,12 @@ abundances = [.999885, .000115, .9893, .0107, .99636, .00364, .99757, .00038, .0
 isotopes =   ['H', 'Deuterium', 'C-12', 'C-13', 'N-14', 'N-15', 'O-16', 'O-17', 'O-18']
 file_isotopes = []  #to store the isotopes to put into the file
             
-"""
-    Gets the mass that may have an isotope of +1 neutron for C,N or O (if there is one)  
-    @param mass     the mass
-    @return  the mass +1
-"""
 def getMassPlus(mass):
+    """
+    Gets the mass that may have an isotope of +1 neutron for 
+    C,N or O (if there is one).Takes parameter mass, the mass 
+    you want to check if there is data for and returns the mass +1.
+    """
     if mass+1 in mass_old2:
         return mass+1
     elif mass+1.1 in mass_old2:
@@ -105,12 +104,12 @@ def getMassPlus(mass):
     elif mass+.8 in mass_old2:
         return mass+.8
 
-"""
-    Gets the mass that may have an isotope of +2 neutron for O (if there is one)
-    @param mass     the mass
-    @return the mass+2
-"""
 def getMassPlusTwo(mass):
+    """
+    Gets the mass that may have an isotope of +2 neutron for 
+    O (if there is one).Takes parameter mass, the mass you 
+    want to check data for  and returns the mass+2.
+    """
     if mass+2 in mass_old2:
         return mass+2
     elif mass+2.1 in mass_old2:
@@ -122,12 +121,12 @@ def getMassPlusTwo(mass):
     elif mass+1.8 in mass_old2:
         return mass+1.8
 
-"""
-    Checks if the number of carbons, nitrogens or oxygens is in double-digits
-    @param element  the element to check quantity of
-    @return     True if there are >9 of an element in a molecule, False otherwise
-"""
 def hasDoubleDig(element):
+    """
+    Checks if the number of carbons, nitrogens or oxygens is in double-digits.
+    Takes parameter element, the element to check quantity of.
+    Returns 'True' if there are >9 of an element in a molecule, 'False' otherwise.
+    """
     if element == 'C':
         try:
             int(molecules[i][1:3])
@@ -249,13 +248,13 @@ w.close()
 os.chdir('/Users/'+username+'/Desktop') #change directory back to desktop
 os.chdir("reference_spectra")  #folder on desktop with all of the reference spectra files
 
-"""
-    Finds the file that has the data for the molecule with the given mass.
-    @param filename  name of the file being evaluated for mass
-    @param mass     the target mass
-    @return     True if file molecular mass corresponds to given mass, False otherwise
-"""
 def isMatch(filename, mass):
+    """
+    Finds the file that has the data for the molecule with the given mass.
+    Takes parameter filename, the name of the file being evaluated for mass
+    and param mass, the target mass. Returns 'True' if file molecular mass 
+    corresponds to given mass, 'False' otherwise.
+    """
     totalMass = 0
     if 'H' in filename:
         if filename[filename.index('H')+1].isdigit() and filename[filename.index('H')+2].isdigit():
@@ -301,12 +300,12 @@ def isMatch(filename, mass):
     else:
         return False
 
-"""
-    Gets the mass corresponding to a molecule on file.
-    @param filename     name of the molecule on file
-    @return     the mass corresponding to that molecule
-"""
 def getMass(filename):
+    """
+    Gets the mass corresponding to a molecule on file.
+    Takes param filename, the name of the molecule on file.
+    Returns the mass corresponding to that molecule.
+    """
     totalMass = 0
     if 'H' in filename:
         if filename[filename.index('H')+1].isdigit() and filename[filename.index('H')+2].isdigit():
@@ -349,8 +348,6 @@ def getMass(filename):
 generateGraph = True  
 while (generateGraph): #keeps running program if user wants to see more spectra
     
-    spectrum_mass = []  #list to store the masses for the spectrum
-    spectrum_intensity = []  #list to store the relative intensities
     masses_on_file = []  #list to store all the molecular masses in reference spectra
     mols_on_file = []  #list to store all of the different molecules in the reference files
     spectra_files = []  #list to store the spectra for molecules with mass given by user
@@ -377,6 +374,8 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     #creates dictionary for the mass and list for the intensity. to be used for plotting
     spectrum_mass = {}
     spectrum_intensity = {}
+    plotMass = []
+    plotIntensity = []
     
     for i in range(len(spectra_files)): 
         spectrum_mass_temp = []  #lists to store data for dictionaries
@@ -393,16 +392,16 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             spectrum_mass[spectra_files[i]] = spectrum_mass_temp  #adding the data to the dictionaries
             spectrum_intensity[spectra_files[i]] = spectrum_intensity_temp
     
-    #turns the intensities into decimals
+    #turns the intensities into floats
     for i in spectrum_intensity:
         spectrum_intensity[i] = [(j/100.0) for j in spectrum_intensity[i]]
-    
-    """
-        Gets the floating point mass for given_mass.
-        @param mass   integer mass given by user
-        @return   the floating point mass
-    """    
+     
     def oldMass(mass):
+        """
+        Gets the floating point mass for given_mass.
+        Takes param mass, the integer mass given by user.
+        Returns the floating point mass.
+        """   
         if float(mass)+.1 in mass_old2:
             return float(mass)+.1
         elif float(mass)+.2 in mass_old2:
@@ -414,12 +413,50 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         elif float(mass)+0 in mass_old2:
             return int(mass)
     
+    def oldMassMax(mass):
+        """
+        Gets the floating point mass for maximum mass. This is 
+        so that the mass can be found in the old mass list, which 
+        has most masses as floating points.
+        Takes param mass, the integer mass from reference spectra.
+        Returns the floating point mass.
+        """
+        if float(mass)+1 in mass_old2:
+            return float(mass)+1
+        elif float(mass)+1.1 in mass_old2:
+            return float(mass)+1.1
+        elif float(mass)+1.2 in mass_old2:
+            return float(mass)+1.2
+        elif float(mass)+.9 in mass_old2:
+            return float(mass)+.9
+        elif float(mass)+.8 in mass_old2:
+            return float(mass)+.8
+    
+    def oldMassMin(mass):
+        """
+        Gets the floating point mass for minimum mass. This is 
+        so that the mass can be found in the old mass list, which 
+        has most masses as floating points.
+        Takes param mass, the integer mass from reference spectra.
+        Returns the floating point mass.
+        """
+        if float(mass)-1 in mass_old2:
+            return float(mass)-1
+        elif float(mass)-1.1 in mass_old2:
+            return float(mass)-1.1
+        elif float(mass)-1.2 in mass_old2:
+            return float(mass)-1.2
+        elif float(mass)-.9 in mass_old2:
+            return float(mass)-.9
+        elif float(mass)-.8 in mass_old2:
+            return float(mass)-.8
+    
     ###### PLOTTING goes here ###### 
     intensities = [float(i) for i in intensities]  #makes the intensities numbers
     minMass = min(spectrum_mass_temp) #gets min and max mass to align x-axis
     maxMass = max(spectrum_mass_temp)
-    plotMass = mass_old2[mass_old2.index(float(oldMass(minMass))):mass_old2.index(float(oldMass(maxMass)))]  #gets the masses and intensities for range around given mass
-    plotIntensity = intensities[mass_old2.index(float(oldMass(minMass))):mass_old2.index(float(oldMass(maxMass)))]
+    plotMass = mass_old2[mass_old2.index(oldMassMin(minMass)):mass_old2.index(oldMassMax(maxMass))]  #gets the masses and intensities for range around given mass
+    plotIntensity = intensities[mass_old2.index(float(oldMassMin(minMass))):mass_old2.index(float(oldMassMax(maxMass)))]
     normFactor = 99.99/(max(plotIntensity))  #normalization factor to normalize RGA intensities
     plotIntensity = [i*(normFactor) for i in plotIntensity]  #normalizes the intensities
     fig1 = plt.figure(1)  
