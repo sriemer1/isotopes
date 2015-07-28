@@ -421,12 +421,12 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     fig1 = plt.figure(1)  
     plt.subplot(311)  #creates subplot with 3 rows
     plt.ylabel('Intensity')  #labels y axis
-    pyplot.bar(plotMass, plotIntensity, width= .001, bottom = None, log = True)  #plots data
+    pyplot.bar(plotMass, plotIntensity, width= .001, bottom = None, log = True, color = 'b', edgecolor = 'b')  #plots data
     
     num = 312  #keeps track of which row to plot data on
     for i in spectra_files:
         ax1 = fig1.add_subplot(num) #creates subplots
-        pyplot.bar(spectrum_mass[i], spectrum_intensity[i], width= .001, bottom = None, log = True) #adds data to plots
+        pyplot.bar(spectrum_mass[i], spectrum_intensity[i], width= .001, bottom = None, log = True, color = 'r', edgecolor = 'r') #adds data to plots
         ax1.annotate(i[0:i.index('.')], xy=(.9,.8),xycoords='axes fraction',fontsize=13, color = 'r')  #labels subplots with molecule
         num+=1  #goes to next row
     
