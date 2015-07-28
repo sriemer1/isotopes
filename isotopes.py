@@ -395,7 +395,7 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     
     #turns the intensities into decimals
     for i in spectrum_intensity:
-        spectrum_intensity[i] = [(j/10000.0) for j in spectrum_intensity[i]]
+        spectrum_intensity[i] = [(j/100.0) for j in spectrum_intensity[i]]
     
     """
         Gets the floating point mass for given_mass.
@@ -420,12 +420,14 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     maxMass = max(spectrum_mass_temp)
     plotMass = mass_old2[mass_old2.index(float(oldMass(minMass))):mass_old2.index(float(oldMass(maxMass)))]  #gets the masses and intensities for range around given mass
     plotIntensity = intensities[mass_old2.index(float(oldMass(minMass))):mass_old2.index(float(oldMass(maxMass)))]
+    normFactor = 99.99/(max(plotIntensity))  #normalization factor to normalize RGA intensities
+    plotIntensity = [i*(normFactor) for i in plotIntensity]  #normalizes the intensities
     fig1 = plt.figure(1)  
     plt.subplot(311)  #creates subplot with 3 rows
     if len(spectra_files) > 1:
-        fig1.text(0.01, 0.5, "Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
+        fig1.text(0.01, 0.5, "Relative Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
     else:
-        fig1.text(0.01, 0.63, "Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
+        fig1.text(0.01, 0.63, "Relative Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
     pyplot.bar(plotMass, plotIntensity, width= .001, bottom = None, log = True, color = 'b', edgecolor = 'b')  #plots data
     
     num = 312  #keeps track of which row to plot data on
