@@ -358,8 +358,12 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     mols_on_file = mols_on_file[1:]  #gets rid of weird residual file
     
     while True:
-        given_mass = raw_input("Enter the mass you would like to see the spectrum for: ")  #user enters mass
-        if int(given_mass) in masses_on_file:
+        given_mass = raw_input("Enter the mass you would like to see the spectrum for, or enter 'c' to cancel: ")  #user enters mass
+        if given_mass == 'c' or given_mass == 'C':  #user can exit program if they decide they don't want to enter any more masses
+            print "\nExiting program"
+            os.chdir(owd)  #change back to original directory
+            sys.exit()
+        elif int(given_mass) in masses_on_file:
             break
         else:
             print "No molecule found with that mass. Try again."  #asks user for mass again until mass found
@@ -474,7 +478,7 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         elif float(mass)+0 in mass_old2:
             return float(mass)
     
-    ###### PLOTTING goes here ###### 
+    ###### PLOTTING ###### 
     intensities = [float(i) for i in intensities]  #makes the intensities numbers
     minMass = float(min(spectrum_mass_temp)) #gets min and max mass to align x-axis
     maxMass = float(max(spectrum_mass_temp))
@@ -516,4 +520,4 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     elif answer == 'n' or answer == 'N':
         generateGraph = False
         print "\nProgram over"                               
-os.chdir(owd)  #change directory back to origin directory
+os.chdir(owd)  #change back to original directory
