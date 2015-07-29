@@ -374,6 +374,17 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             spectra_files.append(i)
             mols_on_file = mols_on_file[mols_on_file.index(i)+1:] #searches for next molecule with given mass, if applicable
     
+    #if there are too many files for one mass
+    overload = False
+    if len(spectra_files)>2:
+        overload = True
+        print "\nFile overload. Here are the molecules you have to choose from: "
+        print spectra_files
+        selected = raw_input("\nEnter the spectra you want to see (up to 2) separated by commas: ")
+        selected = list(selected.split(","))
+    if overload:
+        spectra_files = selected
+    
     #creates dictionary for the mass and list for the intensity. to be used for plotting
     spectrum_mass = {}
     spectrum_intensity = {}
@@ -486,24 +497,35 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     plotMass[:] = [i for i in plotMass if plotIntensity[plotMass.index(i)]>=0]
     plotIntensity[:] = [i for i in plotIntensity if i>=0]
     
-    fig1 = plt.figure(1)  
-    plt.subplot(311)  #creates subplot with 3 rows
-    if len(spectra_files) > 1:
-        fig1.text(0.01, 0.5, "Relative Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
-    else:
+    fig1 = plt.figure(1)
+    if len(spectra_files)==1:  
+        plt.subplot(211)  #creates subplot with 4 rows
+        rowTracker = 212  #keeps track of which row to plot data on
         fig1.text(0.01, 0.63, "Relative Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
+    elif len(spectra_files)>1 and len(spectra_files)<=2:
+        plt.subplot(411)
+        rowTracker = 412
+        fig1.text(0.01, 0.5, "Relative Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
+    
     pyplot.bar(plotMass, plotIntensity, width= .001, bottom = None, log = True, color = 'b', edgecolor = 'b')  #plots data
     plt.xlim(xmin= minMass-5)
     plt.xlim(xmax= maxMass+5)
     
-    num = 312  #keeps track of which row to plot data on
     for i in spectra_files:
-        ax1 = fig1.add_subplot(num) #creates subplots
+        ax1 = fig1.add_subplot(rowTracker) #creates subplots
         pyplot.bar(spectrum_mass[i], spectrum_intensity[i], width= .001, bottom = None, log = True, color = 'r', edgecolor = 'r') #adds data to plots
         plt.xlim(xmin= minMass-5)
         plt.xlim(xmax= maxMass+5)
         ax1.annotate(i[0:i.index('.')], xy=(.9,.8),xycoords='axes fraction',fontsize=13)  #labels subplots with molecule
-        num+=1  #goes to next row
+        rowTracker+=1  #goes to next row
+    
+    #generates subplot that is a combination of the various reference spectra for given mass
+    if len(spectra_files)>1:
+        for i in spectra_files:    
+            ax2 = fig1.add_subplot(rowTracker)
+            pyplot.bar(spectrum_mass[i], spectrum_intensity[i], width= .001, bottom = None, log = True, color = 'm', edgecolor = 'm') #adds data to plots
+            plt.xlim(xmin= minMass-5)
+            plt.xlim(xmax= maxMass+5)
     
     plt.xlabel('Mass (amu)', fontsize = 14)  #labels x axis
     plt.tight_layout()  #organizes layout so there is no overlap
@@ -520,6 +542,9 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     answer = raw_input("Would you like to enter another mass (y/n)? ")  #asks if user wants to see another spectrum
     if answer == 'y' or answer == 'Y':
         generateGraph = True
+        if overload:
+            print "\n Previous molecules chosen: "  #displays molecules chosen so user can choose new combination
+            print selected
         plt.close()  #closes plot 
     elif answer == 'n' or answer == 'N':
         generateGraph = False
