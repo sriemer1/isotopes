@@ -444,8 +444,6 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             return float(mass)+.9
         elif float(mass)+.8 in mass_old2:
             return float(mass)+.8
-        elif float(mass)+0 in mass_old2:
-            return float(mass)
     
     def oldMassMin(mass):
         """
@@ -475,17 +473,19 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             return float(mass)-.9
         elif float(mass)-.8 in mass_old2:
             return float(mass)-.8
-        elif float(mass)+0 in mass_old2:
-            return float(mass)
-    
+        
     ###### PLOTTING ###### 
     intensities = [float(i) for i in intensities]  #makes the intensities numbers
     minMass = float(min(spectrum_mass_temp)) #gets min and max mass to align x-axis
     maxMass = float(max(spectrum_mass_temp))
-    plotMass = mass_old2[mass_old2.index(oldMassMin(minMass)):mass_old2.index(oldMassMax(maxMass))]  #gets the masses and intensities for range around given mass
-    plotIntensity = intensities[mass_old2.index(oldMassMin(minMass)):mass_old2.index(oldMassMax(maxMass))]
+    plotMass = mass_old2[mass_old2.index(oldMassMin(minMass))-5:mass_old2.index(oldMassMax(maxMass))+5]  #gets the masses and intensities for range around given mass
+    plotIntensity = intensities[mass_old2.index(oldMassMin(minMass))-5:mass_old2.index(oldMassMax(maxMass))+5]
     normFactor = 99.99/(max(plotIntensity))  #normalization factor to normalize RGA intensities
     plotIntensity = [i*(normFactor) for i in plotIntensity]  #normalizes the intensities
+    #remove negative intensities
+    plotMass[:] = [i for i in plotMass if plotIntensity[plotMass.index(i)]>=0]
+    plotIntensity[:] = [i for i in plotIntensity if i>=0]
+    
     fig1 = plt.figure(1)  
     plt.subplot(311)  #creates subplot with 3 rows
     if len(spectra_files) > 1:
@@ -493,11 +493,15 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     else:
         fig1.text(0.01, 0.63, "Relative Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
     pyplot.bar(plotMass, plotIntensity, width= .001, bottom = None, log = True, color = 'b', edgecolor = 'b')  #plots data
+    plt.xlim(xmin= minMass-5)
+    plt.xlim(xmax= maxMass+5)
     
     num = 312  #keeps track of which row to plot data on
     for i in spectra_files:
         ax1 = fig1.add_subplot(num) #creates subplots
         pyplot.bar(spectrum_mass[i], spectrum_intensity[i], width= .001, bottom = None, log = True, color = 'r', edgecolor = 'r') #adds data to plots
+        plt.xlim(xmin= minMass-5)
+        plt.xlim(xmax= maxMass+5)
         ax1.annotate(i[0:i.index('.')], xy=(.9,.8),xycoords='axes fraction',fontsize=13)  #labels subplots with molecule
         num+=1  #goes to next row
     
