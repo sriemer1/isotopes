@@ -521,11 +521,16 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     
     #generates subplot that is a combination of the various reference spectra for given mass
     if len(spectra_files)>1:
-        for i in spectra_files:    
+        labelPos = .4  #position for first label
+        for i in spectra_files:
+            label = ""
+            label+=(str(i[0:i.index('.')]) + "\n") #gets name of molecules for label
             ax2 = fig1.add_subplot(rowTracker)
-            pyplot.bar(spectrum_mass[i], spectrum_intensity[i], width= .001, bottom = None, log = True, color = 'm', edgecolor = 'm') #adds data to plots
+            pyplot.bar(spectrum_mass[i], spectrum_intensity[i], width= .001, bottom = None, log = True, color = 'c', edgecolor = 'c') #adds data to plots
+            ax2.annotate(label, xy=(.9,labelPos),xycoords='axes fraction',fontsize=13) 
             plt.xlim(xmin= minMass-5)
             plt.xlim(xmax= maxMass+5)
+            labelPos-=.2  #position for second label
     
     plt.xlabel('Mass (amu)', fontsize = 14)  #labels x axis
     plt.tight_layout()  #organizes layout so there is no overlap
