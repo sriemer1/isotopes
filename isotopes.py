@@ -521,6 +521,23 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     
     #generates subplot that is a combination of the various reference spectra for given mass
     if len(spectra_files)>1:
+        first = spectra_files[0]
+        second = spectra_files[1]
+        first_masses = spectrum_mass[first]
+        first_intensities = spectrum_intensity[first]
+        second_masses = spectrum_mass[second]
+        second_intensities = spectrum_intensity[second]
+        added_intensities = []
+        added_masses = []
+        
+        #adds the added intensities to the list to be plotted
+        for i in first_masses:
+            if i in second_masses:
+                added_intensities.append(first_intensities[first_masses.index(i)] + second_intensities[second_masses.index(i)])
+                added_masses.append(i)
+        spectrum_mass[first].extend(added_masses)
+        spectrum_intensity[first].extend(added_intensities)
+        
         labelPos = .4  #position for first label
         for i in spectra_files:
             label = ""
