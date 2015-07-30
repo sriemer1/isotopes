@@ -359,32 +359,35 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     
     while True:
         given_mass = raw_input("Enter the mass you would like to see the spectrum for, or enter 'c' to cancel: ")  #user enters mass
+        given_mass_temp = given_mass 
         if given_mass == 'c' or given_mass == 'C':  #user can exit program if they decide they don't want to enter any more masses
             print "\nExiting program"
-            os.chdir(owd)  #change back to original directory
+            os.chdir(owd)  #change back to original directory before exiting
             sys.exit()
         elif int(given_mass) in masses_on_file:
             break
         else:
             print "No molecule found with that mass. Try again."  #asks user for mass again until mass found
-    
-   #gets the names of the molecules/files that match the mass given by the user   
+                
+    #gets the names of the molecules/files that match the mass given by the user   
     for i in mols_on_file:
         if isMatch(i, int(given_mass)):
             spectra_files.append(i)
             mols_on_file = mols_on_file[mols_on_file.index(i)+1:] #searches for next molecule with given mass, if applicable
     
     #if there are too many files for one mass
-    overload = False
     if len(spectra_files)>2:
         overload = True
         print "\nFile overload. Here are the molecules you have to choose from: "
         print spectra_files
-        selected = raw_input("\nEnter the spectra you want to see (up to 2) separated by commas: ")
+        selected = raw_input("Enter the spectra you want to see (up to 2) separated by commas: ")
         selected = list(selected.split(","))
+        selected = [s+'.txt' for s in selected]
+    else:
+        overload = False
     if overload:
         spectra_files = selected
-    
+        
     #creates dictionary for the mass and list for the intensity. to be used for plotting
     spectrum_mass = {}
     spectrum_intensity = {}
@@ -398,8 +401,7 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             numbers = []  #list to store all mass spectrum data directly from file before being processed
             for line in f:
                 if line[0].isdigit():  #skips header in file
-                    numbers.append(line)
-            
+                    numbers.append(line) 
             str_data = ''.join(numbers) #makes numbers into a string so the data can be split up
             spectrum_mass_temp.extend(int(x.split(',')[0].strip()) for x in str_data.split())  #splits up data and adds it to lists
             spectrum_intensity_temp.extend(int(x.split(',')[1].strip()) for x in str_data.split())
@@ -565,7 +567,7 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     if answer == 'y' or answer == 'Y':
         generateGraph = True
         if overload:
-            print "\n Previous molecules chosen: "  #displays molecules chosen so user can choose new combination
+            print "\nPrevious molecules chosen: "  #displays molecules chosen so user can choose new combination
             print selected
         plt.close()  #closes plot 
     elif answer == 'n' or answer == 'N':
