@@ -70,7 +70,7 @@ with open(filename2) as f2: #opens RGA data file
         mass_old1.append(nm2[i])
     for i in range (1, len(nm2), 2):
         intensities.append(nm2[i])
-mass_old2 = [float(i) for i in mass_old1]    
+mass_old2 = [float(i) for i in mass_old1]   
         
 os.chdir(owd) #back to original working directory (wherever allmol file is) 
                        
@@ -359,7 +359,6 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     
     while True:
         given_mass = raw_input("Enter the mass you would like to see the spectrum for, or enter 'c' to cancel: ")  #user enters mass
-        given_mass_temp = given_mass 
         if given_mass == 'c' or given_mass == 'C':  #user can exit program if they decide they don't want to enter any more masses
             print "\nExiting program"
             os.chdir(owd)  #change back to original directory before exiting
@@ -572,5 +571,75 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         plt.close()  #closes plot 
     elif answer == 'n' or answer == 'N':
         generateGraph = False
-        print "\nProgram over"                               
+        print "\nGraph generated"  
+        
+        #turns masses from reference spectra into corresponding floating point values from RGA data to compare peaks       
+        for i, value in enumerate(spectrum_mass[spectra_files[0]]):
+            if value+.1 in plotMass:
+                spectrum_mass[spectra_files[0]][i]+=.1
+            elif value+.2 in plotMass:
+                spectrum_mass[spectra_files[0]][i]+=.2
+            elif value-.1 in plotMass:
+                spectrum_mass[spectra_files[0]][i]-=.1
+            elif value+0.0 in plotMass:
+                spectrum_mass[spectra_files[0]][i]+=0.0
+            else:
+                spectrum_mass[spectra_files[0]][i]+=0.0
+        
+        #for comparing one reference spectrum with unknown
+        if not overload:
+            numPeaks = 0  #keeps track of how many peaks are the same
+            for i in spectrum_mass[spectra_files[0]]:
+                if i in plotMass:  #if a mass in reference spectrum is also in unknown spectrum
+                    numPeaks+=1
+            if numPeaks == len(spectrum_mass[spectra_files[0]]):  #if all masses in ref spectrum are in unknown
+                for i in spectrum_intensity[spectra_files[0]]:
+                    #compares the intensities at the peaks for reference and unknown
+                    if i <= plotIntensity[plotMass.index(spectrum_mass[spectra_files[0]][spectrum_intensity[spectra_files[0]].index(i)])]+.5 and i >= plotIntensity[plotMass.index(spectrum_mass[spectra_files[0]][spectrum_intensity[spectra_files[0]].index(i)])]-.5:
+                        print "\Match"
+                    else:
+                        print "\nNot a match"
+                        print "\nProgram over"
+            else:
+                print "\nNot a match"
+                print "\nProgram over"
+            
+        """elif overload:
+            numPeaks = 0
+            for i in mass_old2:
+                if i in added_masses:
+                    numPeaks+=1
+            if numPeaks == len(intensities):
+                print "\nPeaks match"
+                matches = True
+            else:
+                print "\nNot a match"
+                matches = False
+                print "\nProgram over"
+
+            if matches:
+                while True:          
+                    ratio1 = float(raw_input("Enter mixing ratio of " + spectra_files[0] + ": "))
+                    ratio2 = 100.0 - ratio1
+                    first_intensities_ratio = [i*(ratio1) for i in spectrum_intensity[first]]
+                    second_intensities_ratio = [i*(ratio2) for i in spectrum_intensity[second]]
+
+                    for i in first_masses:
+                        if i in second_masses:
+                            added_intensities_ratio.append(first_intensities[first_masses.index(i)] + second_intensities[second_masses.index(i)])
+                            added_masses_ratio.append(i)
+                            spectrum_mass[second].extend(added_masses_ratio)
+                            spectrum_intensity[second].extend(added_intensities_ratio)
+    
+                    numMatches = 0
+                    for i in intensities:
+                        if mass_old2[intensities.index(i)] in spectrum_mass[second]:
+                            if i == spectrum_intensity[second][spectrum_mass[second].index(mass_old2[intensities.index(i)])]:
+                                numMatches+=1
+                    if numMatches == len(intensities):
+                        print ("\nMatch found, the ratio of" +spectra_files[0] +" and "+spectra_files[1]+" is " +ratio1+"/"+ratio2)
+                        break
+                    else:
+                        print "\nNot a match, try a different ratio" """
+                                       
 os.chdir(owd)  #change back to original directory
