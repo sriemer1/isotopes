@@ -377,8 +377,7 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     #if there are too many files for one mass
     if len(spectra_files)>2:
         overload = True
-        print "\nFile overload. Here are the molecules you have to choose from: "
-        print spectra_files
+        print "\nFile overload. Here are the molecules you have to choose from: " + str(spectra_files)
         selected = raw_input("Enter the spectra you want to see (up to 2) separated by commas: ")
         selected = list(selected.split(","))
         selected = [s+'.txt' for s in selected]
@@ -627,8 +626,11 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             else:
                 print "\nNot a match"
                 print "\nProgram over"
-            
-        """elif overload:
+         
+        #for comparing two spectra with the unknown       
+        elif overload:
+            added_intensities_ratio = []
+            added_masses_ratio = []
             numPeaks = 0
             for i in mass_old2:
                 if i in added_masses:
@@ -639,13 +641,23 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             else:
                 print "\nNot a match"
                 matches = False
-                print "\nProgram over"
-
+                print "\nProgram over" 
+            
             if matches:
                 while True:          
-                    ratio1 = float(raw_input("Enter mixing ratio of " + spectra_files[0] + ": "))
-                    ratio2 = 100.0 - ratio1
-                    first_intensities_ratio = [i*(ratio1) for i in spectrum_intensity[first]]
+                    ratio1 = raw_input("Enter mixing ratio of " + spectra_files[0][0:spectra_files[0].index('.')] + " (or enter 'c' to cancel): ")
+                    if ratio1 == 'c' or ratio1 == 'C':  #exit program if user wants
+                        print "\nExiting program"
+                        os.chdir(owd)  #change back to original directory
+                        sys.exit()
+                    else:
+                        ratio1 = float(ratio1) #turns ratio into a number
+                    ratio2 = 100.0 - ratio1  #gets ratio2 without having to ask user
+                    print "\nMixing ratio of " + spectra_files[0][0:spectra_files[0].index('.')] + ": " + str(ratio1) 
+                    print "Mixing ratio of " + spectra_files[1][0:spectra_files[1].index('.')] + ": " + str(ratio2)
+                    ratio1 = (ratio1/100.0)  #turns ratios in decimals
+                    ratio2 = (ratio2/100.0)
+                    first_intensities_ratio = [i*(ratio1) for i in spectrum_intensity[first]]  #changes intensities to what they would be with given ratios
                     second_intensities_ratio = [i*(ratio2) for i in spectrum_intensity[second]]
 
                     for i in first_masses:
@@ -664,6 +676,6 @@ while (generateGraph): #keeps running program if user wants to see more spectra
                         print ("\nMatch found, the ratio of" +spectra_files[0] +" and "+spectra_files[1]+" is " +ratio1+"/"+ratio2)
                         break
                     else:
-                        print "\nNot a match, try a different ratio" """
+                        print "\nNot a match, try a different ratio" 
                                        
 os.chdir(owd)  #change back to original directory
