@@ -658,8 +658,8 @@ while (generateGraph): #keeps running program if user wants to see more spectra
                     else:
                         ratio1 = float(ratio1) #turns ratio into a number
                     ratio2 = 100.0 - ratio1  #gets ratio2 without having to ask user
-                    print "\nMixing ratio of " + spectra_files[0][0:spectra_files[0].index('.')] + ": " + str(ratio1) 
-                    print "Mixing ratio of " + spectra_files[1][0:spectra_files[1].index('.')] + ": " + str(ratio2)
+                    print "\nMixing ratio of " + spectra_files[0][0:spectra_files[0].index('.')] + ": " + str(ratio1) + "%"
+                    print "Mixing ratio of " + spectra_files[1][0:spectra_files[1].index('.')] + ": " + str(ratio2) + "%"
                     ratio1 = (ratio1/100.0)  #turns ratios in decimals
                     ratio2 = (ratio2/100.0)
                     first_intensities_ratio = [i*(ratio1) for i in spectrum_temp_intensity]  #changes intensities to what they would be with given ratios
@@ -669,11 +669,8 @@ while (generateGraph): #keeps running program if user wants to see more spectra
                         if i in second_masses:
                             added_intensities_ratio.append(first_intensities_ratio[first_masses.index(i)] + second_intensities_ratio[second_masses.index(i)])
                             added_masses_ratio.append(i)
-                            spectrum_mass[second].extend(added_masses_ratio)
-                            spectrum_intensity[second].extend(added_intensities_ratio)
-                    
-                    print added_masses_ratio
-                    print added_intensities_ratio           
+                    print first_intensities_ratio
+                    print second_intensities_ratio
                     
                     numMatches = 0
                     for i in plotIntensity:
