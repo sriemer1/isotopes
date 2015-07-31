@@ -523,13 +523,15 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     if len(spectra_files)>1:
         first = spectra_files[0]
         second = spectra_files[1]
-        first_masses = spectrum_mass[first]
-        first_intensities = spectrum_intensity[first]
+        spectrum_temp_mass = [i for i in spectrum_mass[first]]
+        spectrum_temp_intensity = [i for i in spectrum_intensity[first]] 
+        first_masses = spectrum_temp_mass
+        first_intensities = spectrum_temp_intensity
         second_masses = spectrum_mass[second]
         second_intensities = spectrum_intensity[second]
         added_intensities = []
-        added_masses = []
-    
+        added_masses = []   
+        
         #adds the added intensities to the list to be plotted
         for i in first_masses:
             if i in second_masses:
@@ -588,21 +590,21 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         generateGraph = False
         print "\nGraph generated"  
         
-        #turns masses from reference spectra into corresponding floating point values from RGA data to compare peaks       
-        for i, value in enumerate(spectrum_mass[spectra_files[0]]):
-            if value+.1 in plotMass:
-                spectrum_mass[spectra_files[0]][i]+=.1
-            elif value+.2 in plotMass:
-                spectrum_mass[spectra_files[0]][i]+=.2
-            elif value-.1 in plotMass:
-                spectrum_mass[spectra_files[0]][i]-=.1
-            elif value+0.0 in plotMass:
-                spectrum_mass[spectra_files[0]][i]+=0.0
-            else:
-                spectrum_mass[spectra_files[0]][i]+=0.0
-        
         #for comparing one reference spectrum with unknown
         if not overload:
+            #turns masses from reference spectra into corresponding floating point values from RGA data to compare peaks       
+            for i, value in enumerate(spectrum_mass[spectra_files[0]]):
+                if value+.1 in plotMass:
+                    spectrum_mass[spectra_files[0]][i]+=.1
+                elif value+.2 in plotMass:
+                    spectrum_mass[spectra_files[0]][i]+=.2
+                elif value-.1 in plotMass:
+                    spectrum_mass[spectra_files[0]][i]-=.1
+                elif value+0.0 in plotMass:
+                    spectrum_mass[spectra_files[0]][i]+=0.0
+                else:
+                    spectrum_mass[spectra_files[0]][i]+=0.0
+                    
             key1 = spectra_files[0]
             numPeaks = 0  #keeps track of how many peaks are the same
             for i in spectrum_mass[key1]:
@@ -629,11 +631,13 @@ while (generateGraph): #keeps running program if user wants to see more spectra
          
         #for comparing two spectra with the unknown       
         elif overload:
+            
             added_intensities_ratio = []
             added_masses_ratio = []
+            """
             numPeaks = 0
-            for i in mass_old2:
-                if i in added_masses:
+            for i in spectrum_mass[first]:
+                if i in plotMass:
                     numPeaks+=1
             if numPeaks == len(intensities):
                 print "\nPeaks match"
@@ -641,8 +645,9 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             else:
                 print "\nNot a match"
                 matches = False
-                print "\nProgram over" 
+                print "\nProgram over" """
             
+            matches = True
             if matches:
                 while True:          
                     ratio1 = raw_input("Enter mixing ratio of " + spectra_files[0][0:spectra_files[0].index('.')] + " (or enter 'c' to cancel): ")
@@ -657,19 +662,22 @@ while (generateGraph): #keeps running program if user wants to see more spectra
                     print "Mixing ratio of " + spectra_files[1][0:spectra_files[1].index('.')] + ": " + str(ratio2)
                     ratio1 = (ratio1/100.0)  #turns ratios in decimals
                     ratio2 = (ratio2/100.0)
-                    first_intensities_ratio = [i*(ratio1) for i in spectrum_intensity[first]]  #changes intensities to what they would be with given ratios
+                    first_intensities_ratio = [i*(ratio1) for i in spectrum_temp_intensity]  #changes intensities to what they would be with given ratios
                     second_intensities_ratio = [i*(ratio2) for i in spectrum_intensity[second]]
-
+                    
                     for i in first_masses:
                         if i in second_masses:
-                            added_intensities_ratio.append(first_intensities[first_masses.index(i)] + second_intensities[second_masses.index(i)])
+                            added_intensities_ratio.append(first_intensities_ratio[first_masses.index(i)] + second_intensities_ratio[second_masses.index(i)])
                             added_masses_ratio.append(i)
                             spectrum_mass[second].extend(added_masses_ratio)
                             spectrum_intensity[second].extend(added_intensities_ratio)
-    
+                    
+                    print added_masses_ratio
+                    print added_intensities_ratio           
+                    
                     numMatches = 0
-                    for i in intensities:
-                        if mass_old2[intensities.index(i)] in spectrum_mass[second]:
+                    for i in plotIntensity:
+                        if plotMass[plotIntensity.index(i)] in spectrum_mass[second]:
                             if i == spectrum_intensity[second][spectrum_mass[second].index(mass_old2[intensities.index(i)])]:
                                 numMatches+=1
                     if numMatches == len(intensities):
