@@ -500,11 +500,11 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     
     fig1 = plt.figure(1)
     if len(spectra_files)==1:  
-        plt.subplot(211)  #creates subplot with 4 rows
+        plt.subplot(211)  #creates subplot with 2 rows
         rowTracker = 212  #keeps track of which row to plot data on
         fig1.text(0.01, 0.63, "Relative Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
     elif len(spectra_files)>1 and len(spectra_files)<=2:
-        plt.subplot(411)
+        plt.subplot(411)  #creates subplot with 4 rows
         rowTracker = 412
         fig1.text(0.01, 0.5, "Relative Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
     
@@ -530,7 +530,7 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         second_intensities = spectrum_intensity[second]
         added_intensities = []
         added_masses = []
-        
+    
         #adds the added intensities to the list to be plotted
         for i in first_masses:
             if i in second_masses:
@@ -538,6 +538,22 @@ while (generateGraph): #keeps running program if user wants to see more spectra
                 added_masses.append(i)
         spectrum_mass[first].extend(added_masses)
         spectrum_intensity[first].extend(added_intensities)
+        
+        #gets rid of the overlapped masses
+        for i in spectrum_mass[first][0:(len(spectrum_mass[first])-len(added_masses))]:
+            if i in added_masses:
+                spectrum_intensity[first].remove(spectrum_intensity[first][spectrum_mass[first].index(i)])
+                spectrum_mass[first].remove(i)
+        
+        #adds in masses and intensities from second spectrum        
+        for i in spectrum_mass[second]:
+            if i not in spectrum_mass[first]:
+                spectrum_intensity[first].append(spectrum_intensity[second][spectrum_mass[second].index(i)])
+                spectrum_mass[first].append(i)
+        
+        #normalize added spectra
+        norm_factor = 99.99/(max(spectrum_intensity[first]))
+        spectrum_intensity[first] = [i*(norm_factor) for i in spectrum_intensity[first]]
         
         labelPos = .4  #position for first label
         for i in spectra_files:
