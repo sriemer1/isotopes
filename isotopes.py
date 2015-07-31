@@ -604,18 +604,26 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         
         #for comparing one reference spectrum with unknown
         if not overload:
+            key1 = spectra_files[0]
             numPeaks = 0  #keeps track of how many peaks are the same
-            for i in spectrum_mass[spectra_files[0]]:
+            for i in spectrum_mass[key1]:
                 if i in plotMass:  #if a mass in reference spectrum is also in unknown spectrum
                     numPeaks+=1
-            if numPeaks == len(spectrum_mass[spectra_files[0]]):  #if all masses in ref spectrum are in unknown
+            if numPeaks == len(spectrum_mass[key1]):  #if all masses in ref spectrum are in unknown
+                #compares the intensities at the peaks for reference and unknown
                 for i in spectrum_intensity[spectra_files[0]]:
-                    #compares the intensities at the peaks for reference and unknown
-                    if i <= plotIntensity[plotMass.index(spectrum_mass[spectra_files[0]][spectrum_intensity[spectra_files[0]].index(i)])]+.5 and i >= plotIntensity[plotMass.index(spectrum_mass[spectra_files[0]][spectrum_intensity[spectra_files[0]].index(i)])]-.5:
-                        print "\Match"
+                    if i < 1:  #adjust margin of error based on magnitude of intensity
+                        if i <= plotIntensity[plotMass.index(spectrum_mass[key1][spectrum_intensity.index(i)])]+.05 and i>= plotIntensity[plotMass.index(spectrum_mass[key1][spectrum_intensity.index(i)])]-.05:
+                            print "\Match"
+                        else:
+                            print "\nNot a match"
+                            print "\nProgram over"
                     else:
-                        print "\nNot a match"
-                        print "\nProgram over"
+                        if i <= plotIntensity[plotMass.index(spectrum_mass[key1][spectrum_intensity.index(i)])]+.5 and i>= plotIntensity[plotMass.index(spectrum_mass[key1][spectrum_intensity.index(i)])]-.5:
+                            print "\Match"
+                        else:
+                            print "\nNot a match"
+                            print "\nProgram over"
             else:
                 print "\nNot a match"
                 print "\nProgram over"
