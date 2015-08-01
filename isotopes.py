@@ -588,23 +588,23 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         plt.close()  #closes plot 
     elif answer == 'n' or answer == 'N':
         generateGraph = False
-        print "\nGraph generated"  
+        print "\nGraph generated"
+        
+        #turns masses from reference spectra into corresponding floating point values from RGA data to compare peaks       
+        for i, value in enumerate(spectrum_mass[spectra_files[0]]):
+            if value+.1 in plotMass:
+                spectrum_mass[spectra_files[0]][i]+=.1
+            elif value+.2 in plotMass:
+                spectrum_mass[spectra_files[0]][i]+=.2
+            elif value-.1 in plotMass:
+                spectrum_mass[spectra_files[0]][i]-=.1
+            elif value+0.0 in plotMass:
+                spectrum_mass[spectra_files[0]][i]+=0.0
+            else:
+                spectrum_mass[spectra_files[0]][i]+=0.0  
         
         #for comparing one reference spectrum with unknown
-        if not overload:
-            #turns masses from reference spectra into corresponding floating point values from RGA data to compare peaks       
-            for i, value in enumerate(spectrum_mass[spectra_files[0]]):
-                if value+.1 in plotMass:
-                    spectrum_mass[spectra_files[0]][i]+=.1
-                elif value+.2 in plotMass:
-                    spectrum_mass[spectra_files[0]][i]+=.2
-                elif value-.1 in plotMass:
-                    spectrum_mass[spectra_files[0]][i]-=.1
-                elif value+0.0 in plotMass:
-                    spectrum_mass[spectra_files[0]][i]+=0.0
-                else:
-                    spectrum_mass[spectra_files[0]][i]+=0.0
-                    
+        if not overload:       
             key1 = spectra_files[0]
             numPeaks = 0  #keeps track of how many peaks are the same
             for i in spectrum_mass[key1]:
@@ -631,11 +631,10 @@ while (generateGraph): #keeps running program if user wants to see more spectra
          
         #for comparing two spectra with the unknown       
         elif overload:
+            added_intensities_ratio = []  #list to store ratioed intensities for overlap
+            added_masses_ratio = []  #list to store masses corresponding to overlap
             
-            added_intensities_ratio = []
-            added_masses_ratio = []
-            """
-            numPeaks = 0
+            numPeaks = 0  #counter to keep track of how many matches there are
             for i in spectrum_mass[first]:
                 if i in plotMass:
                     numPeaks+=1
@@ -645,9 +644,8 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             else:
                 print "\nNot a match"
                 matches = False
-                print "\nProgram over" """
+                print "\nProgram over" 
             
-            matches = True
             if matches:
                 while True:          
                     ratio1 = raw_input("Enter mixing ratio of " + spectra_files[0][0:spectra_files[0].index('.')] + " (or enter 'c' to cancel): ")
@@ -665,31 +663,47 @@ while (generateGraph): #keeps running program if user wants to see more spectra
                     first_intensities_ratio = [i*(ratio1) for i in spectrum_temp_intensity]  #changes intensities to what they would be with given ratios
                     second_intensities_ratio = [i*(ratio2) for i in spectrum_intensity[second]]
                     
+                    #gets the overlap intensities and masses
                     for i in first_masses:
                         if i in second_masses:
                             added_intensities_ratio.append(first_intensities_ratio[first_masses.index(i)] + second_intensities_ratio[second_masses.index(i)])
                             added_masses_ratio.append(i)
                     
+                    #removes overlap intensities and masses from current list
                     for i in added_masses_ratio:
                         if i in first_masses:
                             first_intensities_ratio.remove(first_intensities_ratio[first_masses.index(i)])
                             first_masses.remove(i)
                     
+                    #adds the overlap added intensities and corresponding masses to list to be used for comparison to RGA data
                     for i in range(len(added_intensities_ratio)):
                         first_intensities_ratio.append(added_intensities_ratio[i])
                         first_masses.append(added_masses_ratio[i])
                     
+                    #adds ratioed intensities and corresponding masses from second spectrum
                     for i in range(len(second_masses)):
                         if second_masses[i] not in first_masses:
                             first_intensities_ratio.append(second_intensities_ratio[i])
                             first_masses.append(second_masses[i])
                     
-                    numMatches = 0
-                    for i in plotIntensity:
-                        if plotMass[plotIntensity.index(i)] in spectrum_mass[second]:
-                            if i == spectrum_intensity[second][spectrum_mass[second].index(mass_old2[intensities.index(i)])]:
-                                numMatches+=1
-                    if numMatches == len(intensities):
+                    #turns masses from reference spectra into corresponding floating point values from RGA data to compare peaks       
+                    for i, value in enumerate(first_masses):
+                        if value+.1 in plotMass:
+                            first_masses[i]+=.1
+                        elif value+.2 in plotMass:
+                            first_masses[i]+=.2
+                        elif value-.1 in plotMass:
+                            first_masses[i]-=.1
+                        elif value+0.0 in plotMass:
+                            first_masses[i]+=0.0
+                        else:
+                            first_masses[i]+=0.0
+                        
+                    numMatches = 0    #counter to keep track of how many matches there are  
+                    for i in first_masses:
+                        if first_intensities_ratio[first_masses.index(i)] == plotIntensity[plotMass.index(i)]:
+                            numMatches+=1
+                    if numMatches == len(first_intensities_ratio):
                         print ("\nMatch found, the ratio of" +spectra_files[0] +" and "+spectra_files[1]+" is " +ratio1+"/"+ratio2)
                         break
                     else:
