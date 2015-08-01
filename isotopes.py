@@ -669,8 +669,20 @@ while (generateGraph): #keeps running program if user wants to see more spectra
                         if i in second_masses:
                             added_intensities_ratio.append(first_intensities_ratio[first_masses.index(i)] + second_intensities_ratio[second_masses.index(i)])
                             added_masses_ratio.append(i)
-                    print first_intensities_ratio
-                    print second_intensities_ratio
+                    
+                    for i in added_masses_ratio:
+                        if i in first_masses:
+                            first_intensities_ratio.remove(first_intensities_ratio[first_masses.index(i)])
+                            first_masses.remove(i)
+                    
+                    for i in range(len(added_intensities_ratio)):
+                        first_intensities_ratio.append(added_intensities_ratio[i])
+                        first_masses.append(added_masses_ratio[i])
+                    
+                    for i in range(len(second_masses)):
+                        if second_masses[i] not in first_masses:
+                            first_intensities_ratio.append(second_intensities_ratio[i])
+                            first_masses.append(second_masses[i])
                     
                     numMatches = 0
                     for i in plotIntensity:
