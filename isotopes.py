@@ -71,7 +71,6 @@ with open(filename2) as f2: #opens RGA data file
     for i in range (1, len(nm2), 2):
         intensities.append(nm2[i])
 mass_old2 = [float(i) for i in mass_old1]   
-f2.close()
         
 os.chdir(owd) #back to original working directory (wherever allmol file is) 
                        
