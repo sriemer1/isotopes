@@ -529,7 +529,8 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         first_intensities = spectrum_temp_intensity
         second_masses = spectrum_mass[second]
         second_intensities = spectrum_intensity[second]
-        added_intensities = []
+        #list for intensities and their corresponding masses to be added
+        added_intensities = [] 
         added_masses = []   
         
         #adds the added intensities to the list to be plotted
