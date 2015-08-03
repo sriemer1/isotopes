@@ -604,31 +604,51 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             else:
                 spectrum_mass[spectra_files[0]][i]+=0.0  
         
+        def isPeak(masslist, intensitylist, mass):
+            """
+            Determines if spectrum has a peak at a certain mass. Takes parameters
+            masslist; the list with all the masses for the spectrum, intensitylist; the list 
+            with the intensities, and mass, the mass where the peak is being evaluated.
+            Returns True if there is a peak at the mass, False otherwise.
+            """
+            if masslist.index(mass) == 0:
+                if max(intensitylist[masslist.index(mass):masslist.index(mass)+3]) == mass:
+                    return True
+                else:
+                    return False
+            elif masslist.index(mass) == 1:
+                if max(intensitylist[masslist.index(mass)-1:masslist.index(mass)+3]) == mass:
+                    return True
+                else:
+                    return False
+            elif masslist.index(mass) == len(masslist):
+                if max(intensitylist[masslist.index(mass)-2:]) == mass:
+                    return True
+                else:
+                    return False 
+            elif masslist.index(mass) == len(masslist)-1:  
+                if max(intensitylist[masslist.index(mass)-2:masslist.index(mass)+2]) == mass:
+                    return True
+                else:
+                    return False 
+            else:    
+                if max(intensitylist[masslist.index(mass)-2:masslist.index(mass)+3]) == mass:
+                    return True
+                else:
+                    return False
+        
         #for comparing one reference spectrum with unknown
         if not overload:       
             key1 = spectra_files[0]
             numPeaks = 0  #keeps track of how many peaks are the same
-            for i in spectrum_mass[key1]:
-                if i in plotMass:  #if a mass in reference spectrum is also in unknown spectrum
+            for mass in spectrum_mass[key1]:
+                if isPeak(spectrum_mass[key1], spectrum_intensity[key1], mass) and isPeak(plotMass, plotIntensity, mass):
                     numPeaks+=1
-            if numPeaks == len(spectrum_mass[key1]):  #if all masses in ref spectrum are in unknown
-                #compares the intensities at the peaks for reference and unknown
-                for i in spectrum_intensity[spectra_files[0]]:
-                    if i < 1:  #adjust margin of error based on magnitude of intensity
-                        if i <= plotIntensity[plotMass.index(spectrum_mass[key1][spectrum_intensity.index(i)])]+.05 and i>= plotIntensity[plotMass.index(spectrum_mass[key1][spectrum_intensity.index(i)])]-.05:
-                            print "\Match"
-                        else:
-                            print "\nNot a match"
-                            print "\nProgram over"
-                    else:
-                        if i <= plotIntensity[plotMass.index(spectrum_mass[key1][spectrum_intensity.index(i)])]+.5 and i>= plotIntensity[plotMass.index(spectrum_mass[key1][spectrum_intensity.index(i)])]-.5:
-                            print "\Match"
-                        else:
-                            print "\nNot a match"
-                            print "\nProgram over"
+            if numPeaks == len(spectrum_mass[key1]):  #if all masses/peaks in ref spectrum are in unknown
+                print "\nPossible match"
             else:
                 print "\nNot a match"
-                print "\nProgram over"
+                print "\nProgram over" 
          
         #for comparing two spectra with the unknown       
         elif overload:
@@ -701,8 +721,8 @@ while (generateGraph): #keeps running program if user wants to see more spectra
                             first_masses[i]+=0.0
                         
                     numMatches = 0    #counter to keep track of how many matches there are  
-                    for i in first_masses:
-                        if first_intensities_ratio[first_masses.index(i)] == plotIntensity[plotMass.index(i)]:
+                    for mass in first_masses:
+                        if isPeak(first_masses, first_intensities_ratio, mass) and isPeak(plotMass, plotIntensity, mass):
                             numMatches+=1
                     if numMatches == len(first_intensities_ratio):
                         print ("\nMatch found, the ratio of" +spectra_files[0] +" and "+spectra_files[1]+" is " +ratio1+"/"+ratio2)
