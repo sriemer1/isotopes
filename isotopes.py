@@ -545,7 +545,7 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             if i in added_masses:
                 spectrum_intensity[first].remove(spectrum_intensity[first][spectrum_mass[first].index(i)])
                 spectrum_mass[first].remove(i)
-        
+                
         #adds in masses and intensities from second spectrum        
         for i in spectrum_mass[second]:
             if i not in spectrum_mass[first]:
@@ -561,7 +561,7 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             label = ""
             label+=(str(i[0:i.index('.')]) + "\n") #gets name of molecules for label
             ax2 = fig1.add_subplot(rowTracker)
-            pyplot.bar(spectrum_mass[i], spectrum_intensity[i], width= .001, bottom = None, log = True, color = 'c', edgecolor = 'c') #adds data to plots
+            pyplot.bar(spectrum_mass[first], spectrum_intensity[first], width= .001, bottom = None, log = True, color = 'c', edgecolor = 'c') #adds data to plots
             ax2.annotate(label, xy=(.9,labelPos),xycoords='axes fraction',fontsize=13) 
             plt.xlim(xmin= minMass-5)
             plt.xlim(xmax= maxMass+5)
