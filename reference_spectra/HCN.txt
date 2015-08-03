@@ -1,0 +1,27 @@
+##TITLE=Hydrogen cyanide
+##JCAMP-DX=4.24
+##DATA TYPE=MASS SPECTRUM
+##OWNER=NIST Mass Spectrometry Data Center
+Collection (C) 2014 copyright by the U.S. Secretary of Commerce
+on behalf of the United States of America. All rights reserved.
+##CAS REGISTRY NO=74-90-8
+##$NIST MASS SPEC NO=11
+##MOLFORM=C H N
+##MW=27
+##$NIST SOURCE=MSDC
+##XUNITS=M/Z
+##YUNITS=RELATIVE INTENSITY
+##XFACTOR=1
+##YFACTOR=1
+##FIRSTX=12
+##LASTX=29
+##FIRSTY=420
+##MAXX=29
+##MINX=12
+##MAXY=9999
+##MINY=10
+##NPOINTS=8
+##PEAK TABLE=(XY..XY)
+12,420 13,170 14,170 15,10
+26,1682 27,9999 28,170 29,10
+##END=
