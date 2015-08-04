@@ -1,0 +1,32 @@
+##TITLE=Propiolonitrile
+##JCAMP-DX=4.24
+##DATA TYPE=MASS SPECTRUM
+##ORIGIN=NIST Mass Spectrometry Data Center, 1990.
+##OWNER=NIST Mass Spectrometry Data Center
+Collection (C) 2014 copyright by the U.S. Secretary of Commerce
+on behalf of the United States of America. All rights reserved.
+##CAS REGISTRY NO=1070-71-9
+##$NIST MASS SPEC NO=118857
+##MOLFORM=C3 H N
+##MW=51
+##$NIST SOURCE=MSDC
+##XUNITS=M/Z
+##YUNITS=RELATIVE INTENSITY
+##XFACTOR=1
+##YFACTOR=1
+##FIRSTX=12
+##LASTX=53
+##FIRSTY=415
+##MAXX=53
+##MINX=12
+##MAXY=9999
+##MINY=3
+##NPOINTS=23
+##PEAK TABLE=(XY..XY)
+12,415 13,85 14,66 16,3
+17,5 18,8 24,659 25,796
+26,342 27,64 28,10 32,3
+36,348 37,313 38,665 39,83
+40,4 46,3 47,4 50,2648
+51,9999 52,345 53,5
+##END=
