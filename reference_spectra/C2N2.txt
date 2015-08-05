@@ -1,0 +1,27 @@
+##TITLE=Cyanogen
+##JCAMP-DX=4.24
+##DATA TYPE=MASS SPECTRUM
+##ORIGIN=A.A.Kutin, Moscow, Russia
+##OWNER=NIST Mass Spectrometry Data Center
+Collection (C) 2014 copyright by the U.S. Secretary of Commerce
+on behalf of the United States of America. All rights reserved.
+##CAS REGISTRY NO=460-19-5
+##$NIST MASS SPEC NO=273361
+##MOLFORM=C2 N2
+##MW=52
+##$NIST SOURCE=MSDC
+##XUNITS=M/Z
+##YUNITS=RELATIVE INTENSITY
+##XFACTOR=1
+##YFACTOR=1
+##FIRSTX=26
+##LASTX=53
+##FIRSTY=470
+##MAXX=53
+##MINX=26
+##MAXY=9999
+##MINY=310
+##NPOINTS=3
+##PEAK TABLE=(XY..XY)
+26,470 52,9999 53,310
+##END=
