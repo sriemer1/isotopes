@@ -48,7 +48,7 @@ addToList(numH, 4)
 os.chdir("Mass spec data tables")  #changes directories to where file with processed RGA data is
 flow = raw_input("Enter flow rate: ")
 torr = raw_input("Enter torr: ")
-runNum = raw_input("Enter run number: ")
+runNum = raw_input("Enter run number for plasma: ")
 os.chdir("Data tables "+ flow+"sccm "+ torr+" torr "+runNum)
 
 ##### Collecting masses from RGA data #####
@@ -212,11 +212,11 @@ for i in range(len(isotope_masses)):
         if isotope_masses[i]+2 in mass_old2 or isotope_masses[i]+2.1 in mass_old2 or isotope_masses[i]+2.2 in mass_old2 or isotope_masses[i]+1.9 in mass_old2 or isotope_masses[i]+1.8 in mass_old2: #separate check for O-18 isotope, checks mass+2
             nextMassTwo = getMassPlusTwo(isotope_masses[i])
             if float(intensities[mass_old2.index(nextMassTwo)])/float(intensities[mass_old2.index(isotope_masses[i])]) <= (multiplyByO * .00205)+.0001 and float(intensities[mass_old2.index(nextMassTwo)])/float(intensities[mass_old2.index(isotope_masses[i])]) >= (multiplyByO * .00205)-.0001:
-                file_isotopes.append(str(nextMass)+"/"+str(isotope_masses[i]) + " Isotope is: O-18")
+                file_isotopes.append(str(nextMassTwo)+"/"+str(isotope_masses[i]) + " Isotope is: O-18")
                 file_isotopes.append(molecules[i])
                 file_isotopes.append("------------")
             else:
-                file_isotopes.append(str(nextMass)+"/"+str(isotope_masses[i]) + " Mix of isotopes and/or molecules")
+                file_isotopes.append(str(nextMassTwo)+"/"+str(isotope_masses[i]) + " Mix of isotopes and/or molecules")
                 file_isotopes.append(molecules[i])
                 file_isotopes.append("------------")
                     
