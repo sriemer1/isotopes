@@ -488,8 +488,8 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     intensities = [float(i) for i in intensities]  #makes the intensities numbers
     minMass = float(min(spectrum_mass_temp)) #gets min and max mass to align x-axis
     maxMass = float(max(spectrum_mass_temp))
-    plotMass = mass_old2[mass_old2.index(oldMassMin(minMass))-5:mass_old2.index(oldMassMax(maxMass))+5]  #gets the masses and intensities for range around given mass
-    plotIntensity = intensities[mass_old2.index(oldMassMin(minMass))-5:mass_old2.index(oldMassMax(maxMass))+5]
+    plotMass = mass_old2[mass_old2.index(oldMassMin(minMass)):mass_old2.index(oldMassMax(maxMass))+5]  #gets the masses and intensities for range around given mass
+    plotIntensity = intensities[mass_old2.index(oldMassMin(minMass)):mass_old2.index(oldMassMax(maxMass))+5]
     normFactor = 99.99/(max(plotIntensity))  #normalization factor to normalize RGA intensities
     plotIntensity = [i*(normFactor) for i in plotIntensity]  #normalizes the intensities
     #remove negative intensities
@@ -516,7 +516,7 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         fig1.text(0.01, 0.5, "Relative Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
     
     pyplot.bar(plotMass, plotIntensity, width= .001, bottom = None, log = True, color = 'b', edgecolor = 'b')  #plots data
-    plt.xlim(xmin= minMass-5)
+    plt.xlim(xmin= minMass+5)
     plt.xlim(xmax= maxMass+5)
     
     for i in spectra_files:
