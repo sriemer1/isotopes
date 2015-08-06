@@ -56,6 +56,7 @@ date1 = raw_input("Enter file date (yyyy-mm-dd): ")
 for i in os.listdir(os.getcwd()):
     if i.endswith("_peak_differences "+runNum+".txt") and i.startswith(date1):
         filename2 = i
+
 with open(filename2) as f2: #opens RGA data file
     f2.next()
     columns = csv.reader(f2, delimiter='\t')
@@ -485,6 +486,17 @@ while (generateGraph): #keeps running program if user wants to see more spectra
             return float(mass)-.8
         
     ###### PLOTTING ###### 
+    
+    #removes duplicate intensities
+    duplicates = []
+    for i in mass_old2:
+        if i>9.0:
+            if int(str(i)[0:2]) in mass_old2[mass_old2.index(i)-2:mass_old2.index(i)+2] or float(str(i-.1)) in mass_old2[mass_old2.index(i)-2:mass_old2.index(i)+2]:
+                duplicates.append(i)
+    for i in duplicates:
+        intensities.remove(intensities[mass_old2.index(i)])
+        mass_old2.remove(i)
+    
     intensities = [float(i) for i in intensities]  #makes the intensities numbers
     minMass = float(min(spectrum_mass_temp)) #gets min and max mass to align x-axis
     maxMass = float(max(spectrum_mass_temp))
@@ -496,31 +508,27 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     plotMass[:] = [i for i in plotMass if plotIntensity[plotMass.index(i)]>=0]
     plotIntensity[:] = [i for i in plotIntensity if i>=0]
     
-    #removes duplicate intensities
-    duplicates = []
-    for i in range(len(plotIntensity)-1):
-        if plotIntensity[i] <= plotIntensity[i+1]+.05 and plotIntensity[i] >= plotIntensity[i+1]-.05:
-            duplicates.append(plotIntensity[i+1])
-    for i in duplicates:
-        plotMass.remove(plotMass[plotIntensity.index(i)])
-        plotIntensity.remove(i)
-    
     fig1 = plt.figure(1)
+    pyplot.bar(mass_old2, intensities, width= .001, bottom = None, log = True, color = 'g', edgecolor = 'g') #adds data to plots
+    plt.xlabel('Mass (amu)', fontsize = 14)
+    plt.ylabel('Differences', fontsize = 14)
+    
+    fig2 = plt.figure(2)
     if len(spectra_files)==1:  
         plt.subplot(211)  #creates subplot with 2 rows
         rowTracker = 212  #keeps track of which row to plot data on
-        fig1.text(0.01, 0.63, "Relative Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
+        fig2.text(0.01, 0.63, "Relative Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
     elif len(spectra_files)>1 and len(spectra_files)<=2:
         plt.subplot(411)  #creates subplot with 4 rows
         rowTracker = 412
-        fig1.text(0.01, 0.5, "Relative Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
+        fig2.text(0.01, 0.5, "Relative Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
     
     pyplot.bar(plotMass, plotIntensity, width= .001, bottom = None, log = True, color = 'b', edgecolor = 'b')  #plots data
     plt.xlim(xmin= minMass+5)
     plt.xlim(xmax= maxMass+5)
     
     for i in spectra_files:
-        ax1 = fig1.add_subplot(rowTracker) #creates subplots
+        ax1 = fig2.add_subplot(rowTracker) #creates subplots
         pyplot.bar(spectrum_mass[i], spectrum_intensity[i], width= .001, bottom = None, log = True, color = 'r', edgecolor = 'r') #adds data to plots
         plt.xlim(xmin= minMass-5)
         plt.xlim(xmax= maxMass+5)
@@ -569,7 +577,7 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         for i in spectra_files:
             label = ""
             label+=(str(i[0:i.index('.')]) + "\n") #gets name of molecules for label
-            ax2 = fig1.add_subplot(rowTracker)
+            ax2 = fig2.add_subplot(rowTracker)
             pyplot.bar(spectrum_mass[first], spectrum_intensity[first], width= .001, bottom = None, log = True, color = 'c', edgecolor = 'c') #adds data to plots
             ax2.annotate(label, xy=(.9,labelPos),xycoords='axes fraction',fontsize=13) 
             plt.xlim(xmin= minMass-5)
