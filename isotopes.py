@@ -355,7 +355,6 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         masses_on_file.append(getMass(i))  #adds masses to masses_on_file
     for i in os.listdir(os.getcwd()):
         mols_on_file.append(i)
-    mols_on_file = mols_on_file[1:]  #gets rid of weird residual file
     
     while True:
         given_mass = raw_input("Enter the mass you would like to see the spectrum for, or enter 'c' to cancel: ")  #user enters mass
@@ -496,6 +495,15 @@ while (generateGraph): #keeps running program if user wants to see more spectra
     #remove negative intensities
     plotMass[:] = [i for i in plotMass if plotIntensity[plotMass.index(i)]>=0]
     plotIntensity[:] = [i for i in plotIntensity if i>=0]
+    
+    #removes duplicate intensities
+    duplicates = []
+    for i in range(len(plotIntensity)-1):
+        if plotIntensity[i] <= plotIntensity[i+1]+.05 and plotIntensity[i] >= plotIntensity[i+1]-.05:
+            duplicates.append(plotIntensity[i+1])
+    for i in duplicates:
+        plotMass.remove(plotMass[plotIntensity.index(i)])
+        plotIntensity.remove(i)
     
     fig1 = plt.figure(1)
     if len(spectra_files)==1:  
