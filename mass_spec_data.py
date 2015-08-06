@@ -85,14 +85,14 @@ while programOn:
     except:
         print "\nNo file found."    #if no file with that name is found
         break
-    
+    """
     #normalizes background data   
     index28 = mass.index(' 28.00')
     plasma28 = float(intensityP[index28])
     background28 = float(intensityB[index28])
     factor = plasma28/background28
     intensityB = [(float(i))*factor for i in intensityB]
-    intensityB = [str(i) for i in intensityB] 
+    intensityB = [str(i) for i in intensityB] """
             
     intensityP_ = []   #creates a new list with only intensities for masses ending in .9, .0, .1, .2
     massP = []         #only masses ending in .9, .0, .1, .2
@@ -267,18 +267,9 @@ while programOn:
     for i in range (0,len(mass)):
         allDiffs.append(float(intensityP[i]) - float(intensityB[i]))
     mass1 = [float(i) for i in mass]   #makes a list of masses as float values so masses vs diffs can be plotted
-    
-    #Graphs differences
-    fig1 = plt.figure(1)
-    plt.xlabel('Mass (amu)')
-    plt.ylabel('Differences')
-    peaksMass = [float(i) for i in peaksMass]
-    peaks1 = [float(i) for i in peaks1[0:len(peaks1)-1]]
-    pyplot.bar(peaksMass, peaks1, width= .001, bottom = None, log = True)
-    #plt.plot(mass,allDiffs, color='g') #uncomment to see the curve
         
     #Graphs background and plasma data overlapped
-    fig2 = plt.figure(2)
+    fig2 = plt.figure(1)
     plt.xlabel('Mass (amu)')      #labels x and y axes
     plt.ylabel('Intensity')
     plt.plot(mass,intensityB, color='r') #background is red on graph
