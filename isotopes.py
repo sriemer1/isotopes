@@ -56,7 +56,6 @@ date1 = raw_input("Enter file date (yyyy-mm-dd): ")
 for i in os.listdir(os.getcwd()):
     if i.endswith("_peak_differences "+runNum+".txt") and i.startswith(date1):
         filename2 = i
-
 with open(filename2) as f2: #opens RGA data file
     f2.next()
     columns = csv.reader(f2, delimiter='\t')
@@ -487,26 +486,16 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         
     ###### PLOTTING ###### 
     
-    #removes duplicate intensities
-    duplicates = []
-    for i in mass_old2:
-        if i>9.0:
-            if int(str(i)[0:2]) in mass_old2[mass_old2.index(i)-2:mass_old2.index(i)+2] or float(str(i-.1)) in mass_old2[mass_old2.index(i)-2:mass_old2.index(i)+2]:
-                duplicates.append(i)
-    for i in duplicates:
-        intensities.remove(intensities[mass_old2.index(i)])
-        mass_old2.remove(i)
-    
     intensities = [float(i) for i in intensities]  #makes the intensities numbers
     minMass = float(min(spectrum_mass_temp)) #gets min and max mass to align x-axis
     maxMass = float(max(spectrum_mass_temp))
     plotMass = mass_old2[mass_old2.index(oldMassMin(minMass)):mass_old2.index(oldMassMax(maxMass))+5]  #gets the masses and intensities for range around given mass
     plotIntensity = intensities[mass_old2.index(oldMassMin(minMass)):mass_old2.index(oldMassMax(maxMass))+5]
-    normFactor = 99.99/(max(plotIntensity))  #normalization factor to normalize RGA intensities
-    plotIntensity = [i*(normFactor) for i in plotIntensity]  #normalizes the intensities
     #remove negative intensities
     plotMass[:] = [i for i in plotMass if plotIntensity[plotMass.index(i)]>=0]
     plotIntensity[:] = [i for i in plotIntensity if i>=0]
+    normFactor = 99.99/(max(plotIntensity))  #normalization factor to normalize RGA intensities
+    plotIntensity = [i*(normFactor) for i in plotIntensity]  #normalizes the intensities
     
     fig1 = plt.figure(1)
     pyplot.bar(mass_old2, intensities, width= .001, bottom = None, log = True, color = 'g', edgecolor = 'g') #adds data to plots
@@ -524,7 +513,7 @@ while (generateGraph): #keeps running program if user wants to see more spectra
         fig2.text(0.01, 0.5, "Relative Intensity", rotation="vertical", va="center", fontsize = 14)  #labels y axis
     
     pyplot.bar(plotMass, plotIntensity, width= .001, bottom = None, log = True, color = 'b', edgecolor = 'b')  #plots data
-    plt.xlim(xmin= minMass+5)
+    plt.xlim(xmin= minMass-5)
     plt.xlim(xmax= maxMass+5)
     
     for i in spectra_files:
