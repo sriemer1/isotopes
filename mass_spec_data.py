@@ -231,44 +231,44 @@ while programOn:
     if max3 == differences_temp[0]:
         mass_max3 = mass_differences[0]
         if float((max3)/(float(intensityP[0]))) >= error or float(abs((max3)/float(intensityB[0]))) >= error:
-            peakMass.append(str(mass_max3)+ ",  " +str(max3)+",")
+            peakMass.append(str(mass_max3)+ "   " +str(max3))
     elif max3 == differences_temp[1]:
         mass_max3 = mass_differences[1]
         if float((max3)/(float(intensityP[1]))) >= error or float(abs((max3)/float(intensityB[1]))) >= error:
-            peakMass.append(str(mass_max3)+ ",  " +str(max3)+",")
+            peakMass.append(str(mass_max3)+ "   " +str(max3))
     elif max3 == differences_temp[2]:
         mass_max3 = mass_differences[2]
         if float((max3)/(float(intensityP[2]))) >= error or float(abs((max3)/float(intensityB[2]))) >= error:
-                peakMass.append(str(mass_max3)+ ",  " +str(max3)+",")
+                peakMass.append(str(mass_max3)+ "   " +str(max3))
     
     for i in range(3, len(differences_temp)-2, 4):
         max4 = max(differences_temp[i], differences_temp[i+1], differences_temp[i+2], differences_temp[i+3])
         if max4 == differences_temp[i]:
             mass_max4 = mass_differences[i]
             if float((max4)/(float(intensityP[i]))) >= error or float(abs((max4)/float(intensityB[i]))) >= error:
-                peakMass.append(str(mass_max4)+ ",  " +str(max4)+",")
+                peakMass.append(str(mass_max4)+ "   " +str(max4))
         elif max4 == differences_temp[i+1]:
             mass_max4 = mass_differences[i+1]
             if float((max4)/(float(intensityP[i+1]))) >= error or float(abs((max4)/float(intensityB[i+1]))) >= error:
-                peakMass.append(str(mass_max4)+ ",  " +str(max4)+",")
+                peakMass.append(str(mass_max4)+ "   " +str(max4))
         elif max4 == differences_temp[i+2]:
             mass_max4 = mass_differences[i+2]
             if float((max4)/(float(intensityP[i+2]))) >= error or float(abs((max4)/float(intensityB[i+2]))) >= error:
-                peakMass.append(str(mass_max4)+ ",  " +str(max4)+",")
+                peakMass.append(str(mass_max4)+ "   " +str(max4))
         elif max4 == differences_temp[i+3]:
             mass_max4 = mass_differences[i+3]
             if float((max4)/(float(intensityP[i+3]))) >= error or float(abs((max4)/float(intensityB[i+3]))) >= error:
-                peakMass.append(str(mass_max4)+ ",  " +str(max4)+",")
+                peakMass.append(str(mass_max4)+ "   " +str(max4))
         
     max2 = max(differences_temp[len(differences_temp)-2], differences_temp[len(differences_temp)-1])
     if max2 == differences_temp[len(differences_temp)-2]:
         mass_max2 = mass_differences[len(differences_temp)-2]
         if float((max2)/(float(intensityP[len(differences_temp)-2]))) >= error or float(abs((max2)/float(intensityB[len(differences_temp)-2]))) >= error:
-            peakMass.append(str(mass_max2)+ ",  " +str(max2)+",")
+            peakMass.append(str(mass_max2)+ "   " +str(max2))
     elif max2 == differences_temp[len(differences_temp)-1]:
         mass_max2 = mass_differences[len(differences_temp)-1]
         if float((max2)/(float(intensityP[len(differences_temp)-1]))) >= error or float(abs((max2)/float(intensityB[len(differences_temp)-1]))) >= error:
-            peakMass.append(str(mass_max2)+ ",  " +str(max2)+",")
+            peakMass.append(str(mass_max2)+ "   " +str(max2))
     
     try:
         name2 = str(datetime.now().strftime("%Y-%m-%d")).replace("/","-").replace(":","-") + " "+torr+" torr "+str(error)+ "_peak_differences "+runNumP+".txt"
