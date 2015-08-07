@@ -105,22 +105,27 @@ while programOn:
     
     peaks = []      #initialize a list to store the peak values
     differences = []  #initialize a list to store differences
+    mass_differences = []
+    differences_temp = []
     length = len(mass) #to use as a counter in the for loops
     error = float(raw_input("Enter error as a decimal: ")) #user enters the error they want 
     
     #only looks at data ending in .9, .0, .1, .2
     #adds differences to differences list if there is at least an x percent error between plasma and bckgrnd
-        
+      
     #1.0,1.1,1.2
     diff0 = float(intensityP[0])-float(intensityB[0])
     diff01 = float(intensityP[1])-float(intensityB[1])
     diff02 = float(intensityP[2])-float(intensityB[2])
-    if float((diff0)/(float(intensityP[0]))) >= error or float(abs((diff0)/float(intensityB[0]))) >= error:
-            differences.append(str(mass[0])+ ",  " +str(diff0)+",")
-    if float((diff01)/(float(intensityP[1]))) >= error or float(abs((diff01)/float(intensityB[1]))) >= error:
-            differences.append(str(mass[1])+ ",  " +str(diff01)+",")
-    if float((diff02)/(float(intensityP[2]))) >= error or float(abs((diff02)/float(intensityB[2]))) >= error:
-            differences.append(str(mass[2])+ ",  " +str(diff02)+",")
+    differences.append(str(mass[0])+ ",  " +str(diff0)+",")
+    differences.append(str(mass[1])+ ",  " +str(diff01)+",")
+    differences.append(str(mass[2])+ ",  " +str(diff02)+",")
+    differences_temp.append(diff0)
+    differences_temp.append(diff01)
+    differences_temp.append(diff02)
+    mass_differences.append(mass[0])
+    mass_differences.append(mass[1])
+    mass_differences.append(mass[2])
         
     #middle
     for i in range(10,length-8,10):
@@ -128,30 +133,34 @@ while programOn:
         diff2 = float(intensityP[i-1])-float(intensityB[i-1])
         diff3 = float(intensityP[i+1])-float(intensityB[i+1])
         diff4 = float(intensityP[i+2])-float(intensityB[i+2])
-        if float((diff2)/(float(intensityP[i-1]))) >= error or float(abs((diff2)/float(intensityB[i-1]))) >= error:
-            differences.append(str(mass[i-1])+ ",  " +str(diff2)+",")
-        if float((diff1)/(float(intensityP[i]))) >= error or float(abs((diff1)/float(intensityB[i]))) >= error:
-            differences.append(str(mass[i])+ ",  " +str(diff1)+",")
-        if float((diff3)/(float(intensityP[i+1]))) >= error or float(abs((diff3)/float(intensityB[i+1]))) >= error:
-            differences.append(str(mass[i+1])+ ",  " +str(diff3)+",")
-        if float((diff4)/(float(intensityP[i+2]))) >= error or float(abs((diff4)/float(intensityB[i+2]))) >= error:
-            differences.append(str(mass[i+2])+ ",  " +str(diff4)+",")
+        differences.append(str(mass[i-1])+ ",  " +str(diff2)+",")
+        differences.append(str(mass[i])+ ",  " +str(diff1)+",")
+        differences.append(str(mass[i+1])+ ",  " +str(diff3)+",")
+        differences.append(str(mass[i+2])+ ",  " +str(diff4)+",")
+        differences_temp.append(diff2)
+        differences_temp.append(diff1)
+        differences_temp.append(diff3)
+        differences_temp.append(diff4)
+        mass_differences.append(mass[i])
+        mass_differences.append(mass[i-1])
+        mass_differences.append(mass[i+1])
+        mass_differences.append(mass[i+2])
                 
     #to account for 100 and 99.9 which get cut off in above loop
     diff5 = float(intensityP[length-1])-float(intensityB[length-1])
     diff6 = float(intensityP[length-2])-float(intensityB[length-2])
-    if float((diff5)/(float(intensityP[length-1]))) >= error or float(abs((diff5)/float(intensityB[length-1]))) >= error:
-        differences.append(str(mass[length-1])+ ",  " +str(diff5)+",")
-    if float((diff6)/(float(intensityP[length-2]))) >= error or float(abs((diff6)/float(intensityB[length-2]))) >= error:
-        differences.append(str(mass[length-2])+ ",  " +str(diff6)+",")
+    differences.append(str(mass[length-1])+ ",  " +str(diff5)+",")
+    differences.append(str(mass[length-2])+ ",  " +str(diff6)+",") 
+    differences_temp.append(diff5)
+    differences_temp.append(diff6)
+    mass_differences.append(mass[length-1])
+    mass_differences.append(mass[length-2])
        
-    peaks1 = []
     #finds peaks in plasma data      
     #finds peak in first three elements: 1, 1.1, 1.2
     firstThree = [float(i) for i in intensityP[0:3]]
     massFirstThree = [mass[0:3]]
     peaks.append(str(mass[firstThree.index((max(firstThree)))]) + ",  "+ str(max(firstThree))+",")
-    peaks1.append(max(firstThree))
         
     counter = 3        #counter to get mass corresponding to max intensity
     for i in range(4,len(intensityP_)-2,4):
@@ -163,19 +172,15 @@ while programOn:
             else:
                 counter=counter
                 peaks.append(massP[counter]+ ",  " + str(max1)+",")
-                peaks1.append(max1)
                 counter+=1
                     
     #to account for 100 and 99.9
     if float(intensityP[length-2]) > float(intensityP[length-1]):
         peaks.append(str(mass[length-2])+ ",  " +str(float(intensityP[length-2]))+",")
-        peaks1.append(float(intensityP[length-2]))
     elif float(intensityP[length-2]) == float(intensityP[length-1]):
         peaks.append(str(mass[length-2])+ ",  "+str(float(intensityP[length-2]))+",")
-        peaks1.append(float(intensityP[length-2]))
     else:
         peaks.append(str(mass[length-1]) + ",  "+ str(float(intensityP[length-1]))+",")
-        peaks1.append(float(intensityP[length-1]))
         
     ######## MAKE NEW FILES AND FOLDERS ########
         
@@ -197,7 +202,7 @@ while programOn:
         pass
             
     os.chdir('Data tables '+ flow+'sccm '+torr+ ' torr '+runNumP)  #change directory to new folder on desktop
-        
+       
     #saves peaks into a new file that gets saved in working directory
     try:
         name = str(datetime.now().strftime("%Y-%m-%d").replace("/","-").replace(":","-") +" "+torr+" torr "+ str(error) + "_peak_data "+runNumP+".txt")  #file name has format date,time in military time, torr, error
@@ -220,37 +225,51 @@ while programOn:
     except:
         pass
     
-    #Read in the files created above to create final file with just mass and difference at peak
+    #makes file for peak differences and corresponding masses
+    peakMass = []
+    max3 = max(differences_temp[0], differences_temp[1], differences_temp[2])
+    if max3 == differences_temp[0]:
+        mass_max3 = mass_differences[0]
+        if float((max3)/(float(intensityP[0]))) >= error or float(abs((max3)/float(intensityB[0]))) >= error:
+            peakMass.append(str(mass_max3)+ ",  " +str(max3)+",")
+    elif max3 == differences_temp[1]:
+        mass_max3 = mass_differences[1]
+        if float((max3)/(float(intensityP[1]))) >= error or float(abs((max3)/float(intensityB[1]))) >= error:
+            peakMass.append(str(mass_max3)+ ",  " +str(max3)+",")
+    elif max3 == differences_temp[2]:
+        mass_max3 = mass_differences[2]
+        if float((max3)/(float(intensityP[2]))) >= error or float(abs((max3)/float(intensityB[2]))) >= error:
+                peakMass.append(str(mass_max3)+ ",  " +str(max3)+",")
     
-    peakMassTemp = [] #temporary list to store duplicates from nested for loop below
-    
-    #gets the masses associated with the peak values
-    massPeaks = []
-    with open(name, 'rb') as pf:
-        data1 = csv.reader(pf, delimiter=',')
-        for column in data1:
-            massPeaks.append(column[0])
-    
-    #gets the masses associated with the differences, and gets those differences 
-    massDiffs = []
-    diffs = []
-    with open(name1, 'rb') as df:
-        for i in xrange(1):
-            df.next()  
-        data2 = csv.reader(df, delimiter=',')
-        for column in data2:
-            massDiffs.append(column[0])
-            diffs.append(column[1])       
-            
-    #checks if a mass in the differences file has a corresponding mass in peak file
-    #if it does add to peakmassTemp list
-    peaksMass = []
-    for i in range(len(massDiffs)):
-            if massDiffs[i] in massPeaks :
-                peaksMass.append(massDiffs[i])
-                peakMassTemp.append(str(massDiffs[i]) + " " + str(diffs[i])) 
-    peakMass = numpy.unique(peakMassTemp).tolist()    #new list without duplicates
+    for i in range(3, len(differences_temp)-2, 4):
+        max4 = max(differences_temp[i], differences_temp[i+1], differences_temp[i+2], differences_temp[i+3])
+        if max4 == differences_temp[i]:
+            mass_max4 = mass_differences[i]
+            if float((max4)/(float(intensityP[i]))) >= error or float(abs((max4)/float(intensityB[i]))) >= error:
+                peakMass.append(str(mass_max4)+ ",  " +str(max4)+",")
+        elif max4 == differences_temp[i+1]:
+            mass_max4 = mass_differences[i+1]
+            if float((max4)/(float(intensityP[i+1]))) >= error or float(abs((max4)/float(intensityB[i+1]))) >= error:
+                peakMass.append(str(mass_max4)+ ",  " +str(max4)+",")
+        elif max4 == differences_temp[i+2]:
+            mass_max4 = mass_differences[i+2]
+            if float((max4)/(float(intensityP[i+2]))) >= error or float(abs((max4)/float(intensityB[i+2]))) >= error:
+                peakMass.append(str(mass_max4)+ ",  " +str(max4)+",")
+        elif max4 == differences_temp[i+3]:
+            mass_max4 = mass_differences[i+3]
+            if float((max4)/(float(intensityP[i+3]))) >= error or float(abs((max4)/float(intensityB[i+3]))) >= error:
+                peakMass.append(str(mass_max4)+ ",  " +str(max4)+",")
         
+    max2 = max(differences_temp[len(differences_temp)-2], differences_temp[len(differences_temp)-1])
+    if max2 == differences_temp[len(differences_temp)-2]:
+        mass_max2 = mass_differences[len(differences_temp)-2]
+        if float((max2)/(float(intensityP[len(differences_temp)-2]))) >= error or float(abs((max2)/float(intensityB[len(differences_temp)-2]))) >= error:
+            peakMass.append(str(mass_max2)+ ",  " +str(max2)+",")
+    elif max2 == differences_temp[len(differences_temp)-1]:
+        mass_max2 = mass_differences[len(differences_temp)-1]
+        if float((max2)/(float(intensityP[len(differences_temp)-1]))) >= error or float(abs((max2)/float(intensityB[len(differences_temp)-1]))) >= error:
+            peakMass.append(str(mass_max2)+ ",  " +str(max2)+",")
+    
     try:
         name2 = str(datetime.now().strftime("%Y-%m-%d")).replace("/","-").replace(":","-") + " "+torr+" torr "+str(error)+ "_peak_differences "+runNumP+".txt"
         wr = open(name2, 'w')
